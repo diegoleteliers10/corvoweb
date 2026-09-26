@@ -32,8 +32,9 @@ const facts = [
   description="Corvo is a free, open-source launcher written in Rust. Apps, clipboard, windows, and system actions behind one keystroke."
 >
   <section class="hero">
+    <div class="mark" aria-hidden="true"></div>
     <div class="wrap">
-      <h1>One keystroke.<br />Everything on your machine.</h1>
+      <h1>One keystroke<span class="dot">.</span><br />Everything on your machine<span class="dot">.</span></h1>
       <p class="lede">
         Corvo is a native launcher written in Rust. Launch apps, search files,
         manage windows, and control your system from a single palette on
@@ -54,6 +55,32 @@ const facts = [
       </div>
     </div>
   </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="track">
+      {
+        [0, 1].map(() => (
+          <div class="group">
+            {[
+              ...features.map((f) => f.title),
+              "kill-process",
+              "brew",
+              "pomodoro",
+              "weather",
+              "notes",
+              "media-control",
+              "browser-tabs",
+            ].map((name) => (
+              <span class="titem">
+                <span class="tname">{name}</span>
+                <span class="tsep">·</span>
+              </span>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
 
   <section class="section">
     <div class="wrap">
@@ -129,6 +156,7 @@ const facts = [
   </section>
 
   <section class="section cta-band">
+    <div class="band-mark" aria-hidden="true"></div>
     <div class="wrap center">
       <h2>Get Corvo</h2>
       <p class="lede" style="margin-bottom: var(--s6);">Installers for Apple Silicon, Intel, Linux, and Windows.</p>
@@ -141,14 +169,80 @@ const facts = [
 
 <style>
   .hero {
+    position: relative;
+    overflow: hidden;
     padding: clamp(72px, 10vw, 128px) 0 var(--s8);
     background:
-      radial-gradient(55% 42% at 50% 0%, color-mix(in srgb, var(--corvo-accent) 5%, transparent), transparent),
+      radial-gradient(55% 42% at 50% 0%, color-mix(in srgb, var(--corvo-accent) 8%, transparent), transparent),
       var(--corvo-bg);
   }
-  h1 {
-    max-width: 14ch;
+  .hero .wrap {
+    position: relative;
   }
+  .mark {
+    position: absolute;
+    top: -90px;
+    right: -80px;
+    width: min(52vw, 580px);
+    aspect-ratio: 313 / 234;
+    background: url("/brand/corvo-mark.png") center / contain no-repeat;
+    mix-blend-mode: screen;
+    opacity: 0.42;
+    transform: rotate(-6deg);
+    pointer-events: none;
+    user-select: none;
+  }
+  .dot {
+    color: var(--corvo-accent);
+  }
+  .shot {
+    margin-top: clamp(40px, 6vw, 64px);
+    perspective: 1200px;
+  }
+  .shot :global(.palette) {
+    will-change: transform;
+  }
+
+  /* command ticker */
+  .ticker {
+    border-block: 1px solid var(--corvo-divider);
+    background: var(--corvo-surface);
+    overflow: hidden;
+    padding: 14px 0;
+  }
+  .track {
+    display: flex;
+    width: max-content;
+    animation: ticker 48s linear infinite;
+  }
+  .ticker:hover .track {
+    animation-play-state: paused;
+  }
+  .group {
+    display: flex;
+    align-items: center;
+  }
+  .titem {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  .tname {
+    color: var(--corvo-text-dim);
+  }
+  .tsep {
+    color: var(--corvo-accent);
+    padding: 0 18px;
+    opacity: 0.7;
+  }
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
   .lede {
     max-width: 52ch;
   }
@@ -230,7 +324,36 @@ const facts = [
     margin-top: var(--s4);
   }
   .cta-band {
+    position: relative;
+    overflow: hidden;
     background: var(--corvo-surface);
+    padding: calc(var(--section-y) * 1.12) 0;
+  }
+  .cta-band h2 {
+    font-size: clamp(2.1rem, 4.5vw, 3.2rem);
+  }
+  .band-mark {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: min(46vw, 380px);
+    aspect-ratio: 313 / 234;
+    background: url("/brand/corvo-mark.png") center / contain no-repeat;
+    mix-blend-mode: screen;
+    opacity: 0.4;
+    transform: rotate(-6deg);
+    pointer-events: none;
+  }
+  .cta-band .wrap {
+    position: relative;
+  }
+  @media (max-width: 640px) {
+    .mark {
+      opacity: 0.3;
+      width: 92vw;
+      top: -30px;
+      right: -130px;
+    }
   }
   .center {
     text-align: center;
@@ -246,3 +369,45 @@ const facts = [
     }
   }
 </style>
+
+<script>
+  // Subtle 3D tilt on the launcher mockup. Decorative: hover-capable
+  // pointers only, honors reduced motion, smoothed with a small lerp.
+  const stage = document.querySelector<HTMLElement>(".shot");
+  const card = stage?.querySelector<HTMLElement>(".palette");
+  const fine =
+    matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (stage && card && fine) {
+    let raf = 0;
+    let tx = 0;
+    let ty = 0;
+    let cx = 0;
+    let cy = 0;
+
+    const loop = () => {
+      cx += (tx - cx) * 0.12;
+      cy += (ty - cy) * 0.12;
+      card.style.transform = `perspective(1200px) rotateX(${cy.toFixed(2)}deg) rotateY(${cx.toFixed(2)}deg)`;
+      if (Math.abs(tx - cx) > 0.02 || Math.abs(ty - cy) > 0.02) {
+        raf = requestAnimationFrame(loop);
+      } else {
+        raf = 0;
+      }
+    };
+
+    stage.addEventListener("pointermove", (e) => {
+      const r = stage.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * 6;
+      ty = -((e.clientY - r.top) / r.height - 0.5) * 4;
+      if (!raf) raf = requestAnimationFrame(loop);
+    });
+
+    stage.addEventListener("pointerleave", () => {
+      tx = 0;
+      ty = 0;
+      if (!raf) raf = requestAnimationFrame(loop);
+    });
+  }
+</script>

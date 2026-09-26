@@ -65,6 +65,15 @@ const { features, columns = 2 } = Astro.props;
     background: var(--corvo-pill);
     border: 1px solid var(--corvo-divider);
     color: var(--corvo-text-icon);
+    transition:
+      color 140ms ease,
+      border-color 140ms ease,
+      background-color 140ms ease;
+  }
+  li:hover .ico {
+    color: var(--corvo-accent);
+    border-color: color-mix(in srgb, var(--corvo-accent) 35%, var(--corvo-divider));
+    background: color-mix(in srgb, var(--corvo-selected) 45%, var(--corvo-pill));
   }
   h3 {
     font-size: 0.98rem;

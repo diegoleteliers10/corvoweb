@@ -76,3 +76,13 @@ El hero usa `PaletteMockup.astro`, una réplica del launcher en CSS puro
 2. Crear un componente `Showcase.astro` o reemplazar `PaletteMockup` en el
    hero por la imagen real.
 3. Para GIF/video de demo, agregar `public/demo/` y una sección propia.
+
+## QA visual
+
+`tools/shots.mjs` captura páginas en desktop y móvil para revisión de
+diseño. Requiere un navegador por CDP: `obscura serve --allow-private-network -p 9222`
+y `npm run preview` corriendo.
+
+```bash
+node tools/shots.mjs   # escribe /tmp/corvo-*.png
+```
