@@ -1,0 +1,25 @@
+---
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+const releases = "https://github.com/diegoleteliers10/corvo/releases/latest";
+---
+
+<div class:list={["dl", { compact }]}>
+  <a class="btn btn-primary" href={releases} rel="noopener" target="_blank">macOS</a>
+  <a class="btn btn-ghost" href={releases} rel="noopener" target="_blank">Linux</a>
+  <a class="btn btn-ghost" href={releases} rel="noopener" target="_blank">Windows</a>
+</div>
+
+<style>
+  .dl {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .dl.compact .btn {
+    padding: 0.5em 1em;
+    font-size: 0.88rem;
+  }
+</style>

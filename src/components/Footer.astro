@@ -1,0 +1,116 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="wrap inner">
+    <div class="col brand-col">
+      <span class="brand"><img src="/brand/corvo-icon.png" alt="" width="22" height="22" />corvo</span>
+      <p>A native launcher for macOS, Linux, and Windows. Free and open source under the MIT license.</p>
+    </div>
+    <nav aria-label="Footer">
+      <div class="col">
+        <h3>Project</h3>
+        <a href="/features">Features</a>
+        <a href="/extensions">Extensions</a>
+        <a href="/download">Download</a>
+        <a href="/blog">Blog</a>
+      </div>
+      <div class="col">
+        <h3>Code</h3>
+        <a href="https://github.com/diegoleteliers10/corvo" rel="noopener" target="_blank">GitHub</a>
+        <a
+          href="https://github.com/diegoleteliers10/corvo/releases"
+          rel="noopener"
+          target="_blank">Releases</a
+        >
+        <a
+          href="https://github.com/diegoleteliers10/corvo/blob/main/SPEC.md"
+          rel="noopener"
+          target="_blank">Spec</a
+        >
+        <a
+          href="https://github.com/diegoleteliers10/corvo/blob/main/LICENSE"
+          rel="noopener"
+          target="_blank">MIT License</a
+        >
+      </div>
+    </nav>
+  </div>
+  <div class="wrap legal">
+    <span>© {year} Diego Letelier</span>
+    <span class="mono">Built with Astro. No trackers.</span>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--corvo-divider);
+    padding: 56px 0 32px;
+    background: var(--corvo-surface);
+  }
+  .inner {
+    display: grid;
+    grid-template-columns: 1.2fr 2fr;
+    gap: 48px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-size: 1.1rem;
+  }
+  .brand img {
+    border-radius: 6px;
+  }
+  .col p {
+    font-size: 0.9rem;
+    max-width: 34ch;
+    margin-top: 0.75rem;
+  }
+  nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  h3 {
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--corvo-text-icon);
+    margin-bottom: 4px;
+  }
+  .col a {
+    color: var(--corvo-text-dim);
+    font-size: 0.92rem;
+  }
+  .col a:hover {
+    color: var(--corvo-text);
+    text-decoration: none;
+  }
+  .legal {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    padding-top: 20px;
+    border-top: 1px solid var(--corvo-divider);
+    font-size: 0.82rem;
+    color: var(--corvo-text-icon);
+  }
+  .mono {
+    font-family: var(--font-mono);
+  }
+  @media (max-width: 720px) {
+    .inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

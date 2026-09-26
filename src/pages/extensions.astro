@@ -1,0 +1,133 @@
+---
+import Base from "../layouts/Base.astro";
+
+const shipped = [
+  { name: "app-launcher", desc: "Fuzzy app search with frecency ranking" },
+  { name: "file-search", desc: "Filesystem search with scopes and ignore rules" },
+  { name: "clipboard-manager", desc: "Text, code, color, and image history" },
+  { name: "calculator", desc: "Inline math with history" },
+  { name: "snippets", desc: "Keyword text templates in TOML" },
+  { name: "window-management", desc: "Tiling, gaps, and layout templates" },
+  { name: "emoji-picker", desc: "Emoji search with skin tones" },
+  { name: "quicklinks", desc: "Custom URLs and web searches" },
+  { name: "system-actions", desc: "Dark mode, audio, displays, settings" },
+  { name: "web-search-fallback", desc: "Escape hatch to the web" },
+];
+
+const planned = [
+  { name: "kill-process", desc: "List processes by CPU or memory and kill them", note: "All platforms" },
+  { name: "brew", desc: "Outdated formulae, upgrades, installed packages", note: "macOS" },
+  { name: "text-utilities", desc: "Case conversion, Base64, JSON, UUIDs, hashes", note: "All platforms" },
+  { name: "pomodoro", desc: "Work and break timers with notifications", note: "All platforms" },
+  { name: "weather", desc: "Conditions and forecast via wttr.in", note: "All platforms" },
+  { name: "notes", desc: "Markdown scratchpad with search", note: "All platforms" },
+  { name: "media-control", desc: "MPRIS, SMTC, and AppleScript playback control", note: "All platforms" },
+  { name: "browser-tabs", desc: "Search and focus tabs, bookmarks, and history", note: "macOS first" },
+];
+---
+
+<Base
+  title="Extensions — Corvo"
+  description="Corvo extends through native Rust crates compiled into the binary. See what ships today and what is on the roadmap."
+>
+  <section class="head">
+    <div class="wrap">
+      <h1>Native commands, no plugin runtime</h1>
+      <p class="lede">
+        Corvo has no runtime plugin system by design. Each extension is a Rust
+        crate registered at link time, reviewed like the rest of the codebase,
+        and shipped inside the same binary. Contribution happens through
+        pull requests, not marketplaces.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>In the box today</h2>
+      </div>
+      <ul class="list">
+        {
+          shipped.map((e) => (
+            <li>
+              <code>{e.name}</code>
+              <span>{e.desc}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Batch one, in development</h2>
+      </div>
+      <ul class="list">
+        {
+          planned.map((e) => (
+            <li>
+              <code>{e.name}</code>
+              <span>{e.desc}</span>
+              <span class="note">{e.note}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p style="margin-top: var(--s5);">
+        Follow the plan in
+        <a
+          href="https://github.com/diegoleteliers10/corvo"
+          rel="noopener"
+          target="_blank">the repository</a
+        >, or propose a command in a discussion.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding: clamp(64px, 9vw, 112px) 0 var(--section-gap);
+  }
+  .lede {
+    max-width: 62ch;
+    margin-bottom: 0;
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s4);
+    padding: var(--s3) var(--s1);
+    border-top: 1px solid var(--corvo-divider);
+  }
+  li:last-child {
+    border-bottom: 1px solid var(--corvo-divider);
+  }
+  code {
+    white-space: nowrap;
+  }
+  li span {
+    color: var(--corvo-text-dim);
+    font-size: 0.92rem;
+  }
+  .note {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--corvo-text-icon);
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .note {
+      display: none;
+    }
+  }
+</style>

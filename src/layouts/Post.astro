@@ -1,0 +1,60 @@
+---
+import Base from "./Base.astro";
+
+interface Props {
+  frontmatter: { title: string; description: string; date: string };
+}
+const { frontmatter } = Astro.props;
+---
+
+<Base title={frontmatter.title} description={frontmatter.description}>
+  <article class="wrap post">
+    <p class="meta">
+      <time>{frontmatter.date}</time>
+    </p>
+    <h1>{frontmatter.title}</h1>
+    <div class="prose">
+      <slot />
+    </div>
+    <p><a href="/blog">← All posts</a></p>
+  </article>
+</Base>
+
+<style>
+  .post {
+    max-width: 720px;
+    padding-top: 72px;
+    padding-bottom: 96px;
+  }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--corvo-text-icon);
+    margin-bottom: 8px;
+  }
+  .prose {
+    margin-top: 2rem;
+  }
+  .prose :global(h2) {
+    font-size: 1.4rem;
+    margin-top: 2em;
+  }
+  .prose :global(li) {
+    color: var(--corvo-text-dim);
+  }
+  .prose :global(code) {
+    font-size: 0.85em;
+  }
+  .prose :global(pre) {
+    background: var(--corvo-surface);
+    border: 1px solid var(--corvo-divider);
+    border-radius: var(--radius);
+    padding: 16px;
+    overflow-x: auto;
+  }
+  .prose :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+</style>

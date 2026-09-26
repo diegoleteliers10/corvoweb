@@ -1,0 +1,239 @@
+/* Corvo web design tokens — lifted from crates/corvo-ui/src/lib.rs
+   Spacing: 4px base scale. Motion: sub-300ms, ease-out family. */
+:root {
+  /* palette (from corvo-ui) */
+  --corvo-bg: #0e0f10;
+  --corvo-surface: #17181a; /* COLOR_BACKGROUND */
+  --corvo-menu: #1c1e20; /* COLOR_MENU */
+  --corvo-divider: #282a2d; /* COLOR_DIVIDER */
+  --corvo-pill: #222426; /* COLOR_PILL */
+  --corvo-keycap: #2d3034; /* COLOR_KEYCAP */
+  --corvo-selected: #113c30; /* COLOR_ROW_SELECTED */
+  --corvo-accent: #34d399; /* COLOR_ACCENT */
+  --corvo-text: #ffffff; /* COLOR_TEXT */
+  --corvo-text-dim: #9a9aa5; /* lifted from COLOR_TEXT_DIM for 4.5:1 on bg */
+  --corvo-text-icon: #8e8e93; /* COLOR_TEXT_DIM */
+  --corvo-destructive: #ef4444; /* COLOR_DESTRUCTIVE */
+
+  /* type */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* spacing scale (4px base) */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 24px;
+  --s6: 32px;
+  --s7: 48px;
+  --s8: 64px;
+  --section-y: clamp(88px, 11vw, 136px);
+  --section-gap: clamp(44px, 6vw, 68px);
+
+  /* shape + motion */
+  --radius: 12px;
+  --radius-lg: 16px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --speed: 160ms;
+
+  --max-w: 1080px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--corvo-bg);
+  color: var(--corvo-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+main {
+  display: block;
+}
+
+/* themed browser surfaces */
+::selection {
+  background: var(--corvo-selected);
+  color: var(--corvo-text);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--corvo-keycap);
+  border-radius: 5px;
+  border: 2px solid var(--corvo-bg);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--corvo-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--s5);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.12;
+  letter-spacing: -0.033em;
+  margin: 0 0 var(--s4);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5.5vw, 4.25rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+}
+
+h3 {
+  font-size: 1.08rem;
+  letter-spacing: -0.02em;
+}
+
+p {
+  color: var(--corvo-text-dim);
+  margin: 0 0 var(--s4);
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--corvo-accent);
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--corvo-pill);
+  border: 1px solid var(--corvo-divider);
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+}
+
+/* section rhythm: generous between groups, tight inside */
+.section {
+  padding: var(--section-y) 0;
+  border-top: 1px solid var(--corvo-divider);
+}
+
+.section-head {
+  max-width: 640px;
+  margin-bottom: var(--section-gap);
+}
+
+.section-head h2 {
+  margin-bottom: var(--s4);
+}
+
+.section-head p {
+  font-size: 1.08rem;
+  margin: 0;
+}
+
+.lede {
+  font-size: 1.12rem;
+}
+
+.muted {
+  color: var(--corvo-text-dim);
+}
+
+.accent {
+  color: var(--corvo-accent);
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  border-radius: 10px;
+  padding: 0.78em 1.35em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 140ms var(--ease-out),
+    background-color 140ms ease,
+    border-color 140ms ease;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--corvo-accent);
+  color: #0b2b20;
+}
+
+.btn-primary:hover {
+  background: #4ce0ab;
+}
+
+.btn-ghost {
+  border-color: var(--corvo-divider);
+  background: var(--corvo-pill);
+  color: var(--corvo-text);
+}
+
+.btn-ghost:hover {
+  border-color: var(--corvo-accent);
+}
+
+@media (hover: none) {
+  .btn:hover {
+    transform: none;
+  }
+}

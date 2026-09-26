@@ -1,0 +1,100 @@
+---
+import Base from "../layouts/Base.astro";
+import FeatureList from "../components/FeatureList.astro";
+
+const core = [
+  { icon: "app", title: "App Launcher", body: "Fuzzy search across installed apps with frecency ranking powered by LMDB. The more you use Corvo, the better it ranks." },
+  { icon: "search", title: "File Search", body: "Search your filesystem with configurable scopes and ignore rules, backed by the same SIMD matcher." },
+  { icon: "clipboard", title: "Clipboard History", body: "Text, code, colors, and images. Dedup, retention windows, and respect for password-manager concealment flags." },
+  { icon: "grid", title: "Window Management", body: "Tile windows into halves, thirds, and quarters. Configure gaps and save layout templates." },
+  { icon: "sliders", title: "System Actions", body: "Toggle dark mode, control audio and displays, and jump straight to settings panels." },
+  { icon: "calc", title: "Calculator", body: "Evaluate math expressions inline, with calculation history one keystroke away." },
+  { icon: "snippet", title: "Snippets", body: "Store text templates with custom keywords in a human-editable TOML file." },
+  { icon: "emoji", title: "Emoji Picker", body: "Search emojis by name or keyword and copy them with your preferred skin tone." },
+  { icon: "link", title: "Quicklinks", body: "Open custom URLs and parametric web searches from the same palette." },
+  { icon: "refresh", title: "Auto-Updater", body: "Update checks with cryptographic signature verification. You stay in control of when." },
+];
+
+const architecture = [
+  {
+    title: "One Command trait",
+    body: "Every command implements the same async search/execute trait. Results share one ranking engine, so behavior is identical across the app.",
+  },
+  {
+    title: "Compile-time registry",
+    body: "Commands register through link-time collection. No central list, no merge conflicts, no plugin runtime to attack or update.",
+  },
+  {
+    title: "Non-blocking search",
+    body: "Slow sources refresh on background tasks feeding a cache. The palette never waits on disk, network, or a slow API.",
+  },
+];
+---
+
+<Base
+  title="Features — Corvo"
+  description="Ten built-in commands: app launcher, clipboard history, window management, snippets, and more. All native, all local."
+>
+  <section class="head">
+    <div class="wrap">
+      <h1>Built in, compiled in</h1>
+      <p class="lede">
+        Corvo ships with the commands you reach for dozens of times a day.
+        Each one is a native crate, not a script loaded at runtime.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <FeatureList features={core} columns={1} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Why it stays fast</h2>
+      </div>
+      <div class="arch">
+        {
+          architecture.map((a) => (
+            <article>
+              <h3>{a.title}</h3>
+              <p>{a.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding: clamp(64px, 9vw, 112px) 0 var(--section-gap);
+  }
+  .lede {
+    max-width: 56ch;
+    margin-bottom: 0;
+  }
+  .arch {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s5);
+  }
+  .arch article {
+    border-top: 1px solid var(--corvo-divider);
+    padding-top: var(--s5);
+  }
+  .arch p {
+    font-size: 0.92rem;
+    margin: 0;
+  }
+  @media (max-width: 860px) {
+    .arch {
+      grid-template-columns: 1fr;
+      gap: var(--s6);
+    }
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+interface Props {
+  keys: string[];
+}
+const { keys } = Astro.props;
+---
+
+<span class="keycombo" aria-label={keys.join(" + ")}>
+  {keys.map((k) => <kbd>{k}</kbd>)}
+</span>
+
+<style>
+  .keycombo {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+  }
+  kbd {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--corvo-text);
+    background: var(--corvo-keycap);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    padding: 0.2em 0.55em;
+    line-height: 1.2;
+  }
+</style>

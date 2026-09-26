@@ -1,0 +1,119 @@
+---
+import Base from "../layouts/Base.astro";
+import DownloadButtons from "../components/DownloadButtons.astro";
+import KeyCap from "../components/KeyCap.astro";
+
+const releases = "https://github.com/diegoleteliers10/corvo/releases/latest";
+---
+
+<Base
+  title="Download — Corvo"
+  description="Install Corvo on macOS with Homebrew, on Linux with AppImage or deb, and on Windows with MSI. Or build from source."
+>
+  <section class="head">
+    <div class="wrap">
+      <h1>Get Corvo on every OS</h1>
+      <div class="cta">
+        <DownloadButtons />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid">
+      <article>
+        <h3>macOS</h3>
+        <p>Homebrew, signed DMG for Apple Silicon and Intel.</p>
+        <pre><code>brew install diegoleteliers10/corvo/corvo</code></pre>
+        <p class="alt">Or grab the <a href={releases} rel="noopener" target="_blank">.dmg</a> from Releases.</p>
+      </article>
+      <article>
+        <h3>Linux</h3>
+        <p>AppImage for most distros, .deb for Debian and Ubuntu.</p>
+        <p class="alt">
+          Download the <a href={releases} rel="noopener" target="_blank">.AppImage</a>
+          or <a href={releases} rel="noopener" target="_blank">.deb</a> from Releases,
+          then bind <code>corvo --toggle</code> to a shortcut in your compositor.
+        </p>
+      </article>
+      <article>
+        <h3>Windows</h3>
+        <p>MSI installer or a portable .zip, no admin required.</p>
+        <p class="alt">
+          Download the <a href={releases} rel="noopener" target="_blank">.msi</a>
+          or <a href={releases} rel="noopener" target="_blank">.zip</a> from Releases.
+        </p>
+      </article>
+      <article>
+        <h3>From source</h3>
+        <p>Rust 1.80 or newer. On Linux you need Wayland development packages.</p>
+        <pre><code>git clone https://github.com/diegoleteliers10/corvo
+cd corvo && cargo build --release</code></pre>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>First run</h2>
+      <p style="max-width: 64ch;">
+        Launch Corvo and toggle the palette with <KeyCap keys={["⌥", "Space"]} />.
+        Run the binary again at any time to hide it. On macOS, grant the
+        Accessibility permission when prompted so window tiling works.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding: clamp(64px, 9vw, 112px) 0 var(--s7);
+  }
+  .cta {
+    margin-top: var(--s6);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s5);
+  }
+  article {
+    border-top: 1px solid var(--corvo-divider);
+    padding-top: var(--s5);
+  }
+  h3 {
+    margin-bottom: var(--s2);
+  }
+  article > p {
+    font-size: 0.92rem;
+  }
+  pre {
+    background: var(--corvo-menu);
+    border: 1px solid var(--corvo-divider);
+    border-radius: 10px;
+    padding: var(--s4);
+    overflow-x: auto;
+    margin: var(--s4) 0 0;
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.85rem;
+  }
+  @media (max-width: 560px) {
+    pre code {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+  .alt {
+    margin-top: var(--s3);
+  }
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: var(--s6);
+    }
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const posts = [
+  {
+    slug: "/blog/hello-corvo",
+    title: "Hello, Corvo",
+    date: "2026-09-26",
+    desc: "Why a native launcher, what ships in 0.x, and where the roadmap goes next.",
+  },
+];
+---
+
+<Base title="Blog — Corvo" description="Notes from building Corvo, a native launcher in Rust.">
+  <section class="section head">
+    <div class="wrap">
+      <h1>Notes from the nest</h1>
+      <ul class="posts">
+        {
+          posts.map((p) => (
+            <li>
+              <a href={p.slug}>
+                <h2>{p.title}</h2>
+                <p>{p.desc}</p>
+                <time>{p.date}</time>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head {
+    padding-top: 80px;
+  }
+  .posts {
+    list-style: none;
+    margin: 40px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+  .posts a {
+    display: block;
+    background: var(--corvo-surface);
+    border: 1px solid var(--corvo-divider);
+    border-radius: var(--radius);
+    padding: 26px;
+    color: inherit;
+  }
+  .posts a:hover {
+    text-decoration: none;
+    border-color: color-mix(in srgb, var(--corvo-accent) 45%, var(--corvo-divider));
+  }
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 6px;
+  }
+  p {
+    margin-bottom: 10px;
+  }
+  time {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--corvo-text-icon);
+  }
+</style>

@@ -1,0 +1,158 @@
+---
+const links = [
+  { href: "/features", label: "Features" },
+  { href: "/extensions", label: "Extensions" },
+  { href: "/blog", label: "Blog" },
+  { href: "/download", label: "Download" },
+];
+---
+
+<header class="site-header">
+  <div class="wrap inner">
+    <a class="brand" href="/" aria-label="Corvo home">
+      <img src="/brand/corvo-icon.png" alt="" width="24" height="24" />
+      <span>corvo</span>
+    </a>
+    <nav aria-label="Main">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <div class="actions">
+      <a
+        class="gh"
+        href="https://github.com/diegoleteliers10/corvo"
+        rel="noopener"
+        target="_blank">GitHub</a
+      >
+      <a class="btn btn-primary" href="/download">Download</a>
+      <button class="menu" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile" id="mobile-nav" aria-label="Mobile">
+    {links.map((l) => <a href={l.href}>{l.label}</a>)}
+  </nav>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>(".menu");
+  const header = document.querySelector<HTMLElement>(".site-header");
+  btn?.addEventListener("click", () => {
+    const open = header?.toggleAttribute("data-open");
+    btn.setAttribute("aria-expanded", String(Boolean(open)));
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--corvo-bg) 82%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--corvo-divider);
+  }
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s7);
+    height: 60px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: var(--corvo-text);
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .brand img {
+    border-radius: 6px;
+  }
+  nav {
+    display: flex;
+    gap: var(--s5);
+    margin-left: auto;
+  }
+  nav a {
+    color: var(--corvo-text-dim);
+    font-size: 0.92rem;
+    transition: color 140ms ease;
+  }
+  nav a:hover {
+    color: var(--corvo-text);
+    text-decoration: none;
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s4);
+  }
+  .gh {
+    color: var(--corvo-text-dim);
+    font-size: 0.92rem;
+  }
+  .gh:hover {
+    color: var(--corvo-text);
+    text-decoration: none;
+  }
+  .btn {
+    padding: 0.5em 1em;
+    font-size: 0.88rem;
+  }
+  .menu {
+    display: none;
+    background: none;
+    border: 1px solid var(--corvo-divider);
+    border-radius: 8px;
+    color: var(--corvo-text);
+    padding: 7px;
+    cursor: pointer;
+  }
+  .mobile {
+    display: none;
+  }
+  @media (max-width: 720px) {
+    nav:not(.mobile) {
+      display: none;
+    }
+    .gh {
+      display: none;
+    }
+    .menu {
+      display: inline-flex;
+    }
+    .actions {
+      margin-left: auto;
+    }
+    .mobile {
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      padding: var(--s3) var(--s5) var(--s4);
+      border-top: 1px solid var(--corvo-divider);
+    }
+    [data-open] .mobile {
+      display: flex;
+    }
+    .mobile a {
+      color: var(--corvo-text-dim);
+      padding: 10px 4px;
+      border-bottom: 1px solid var(--corvo-divider);
+      font-size: 0.95rem;
+    }
+    .mobile a:last-child {
+      border-bottom: none;
+    }
+    .mobile a:hover {
+      color: var(--corvo-text);
+      text-decoration: none;
+    }
+  }
+</style>
