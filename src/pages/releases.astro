@@ -1,0 +1,448 @@
+---
+import Base from "../layouts/Base.astro";
+import { fetchReleases } from "../data/releases";
+
+const releases = await fetchReleases();
+const latestRelease = releases[0];
+const previousReleases = releases.slice(1);
+---
+
+<Base
+  title="Releases — Corvo"
+  description="Download every Corvo release: latest native builds for macOS, Windows, and Linux, plus previous versions with direct artifact links."
+>
+  <section class="head">
+    <div class="wrap head-inner">
+      <h1>Releases & downloads</h1>
+      <p class="lede">
+        Every Corvo build, straight from GitHub. Grab the latest below,
+        or pick a previous version with its original artifacts.
+      </p>
+    </div>
+  </section>
+
+  <section class="latest">
+    <div class="wrap">
+      <article class="latest-card">
+        <div class="latest-badges">
+          <span class="pill-latest">Latest release</span>
+          <span class="latest-tag">{latestRelease.tag}</span>
+          {latestRelease.date !== "" && (
+            <span class="latest-date">{latestRelease.date}</span>
+          )}
+        </div>
+
+        <h2 class="latest-title">{latestRelease.title}</h2>
+
+        {latestRelease.highlights.length > 0 && (
+          <ul class="latest-highlights">
+            {latestRelease.highlights.map((h) => (
+              <li>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <h3 class="dl-heading">Direct downloads for {latestRelease.tag}</h3>
+        <div class="dl-grid">
+          {latestRelease.downloads.map((d) => (
+            <a class="dl-card" href={d.url} rel="noopener" target="_blank">
+              <div class="dl-top">
+                <span class="dl-os">{d.platform}</span>
+                <span class="dl-detail">{d.detail}</span>
+              </div>
+              <div class="dl-file">{d.filename}</div>
+              <span class="dl-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                Download
+              </span>
+            </a>
+          ))}
+        </div>
+
+        <div class="latest-foot">
+          <a class="notes-link" href={latestRelease.htmlUrl} rel="noopener" target="_blank">
+            Read the full release notes on GitHub
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  {previousReleases.length > 0 && (
+    <section class="section">
+      <div class="wrap">
+        <div class="prev-head">
+          <h2>Previous versions</h2>
+          <a class="all-link" href="https://github.com/diegoleteliers10/corvo/releases" rel="noopener" target="_blank">
+            All releases on GitHub
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+          </a>
+        </div>
+
+        <div class="prev-list">
+          {previousReleases.map((rel) => (
+            <article class="prev-item" id={rel.tag}>
+              <div class="prev-meta">
+                <span class="prev-tag">{rel.tag}</span>
+                {rel.date !== "" && <span class="prev-date">{rel.date}</span>}
+                <a class="prev-notes" href={rel.htmlUrl} rel="noopener" target="_blank">Notes →</a>
+              </div>
+              <div class="prev-body">
+                <h3 class="prev-title">{rel.title}</h3>
+                {rel.highlights.length > 0 && (
+                  <ul class="prev-highlights">
+                    {rel.highlights.map((h) => <li>{h}</li>)}
+                  </ul>
+                )}
+                <div class="prev-dls">
+                  <span class="prev-dl-label">Direct downloads</span>
+                  <div class="prev-chips">
+                    {rel.downloads.map((d) => (
+                      <a class="prev-chip" href={d.url} title={d.filename} rel="noopener" target="_blank">
+                        <span>{d.platform} · {d.detail}</span>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .head {
+    padding: clamp(64px, 9vw, 112px) 0 clamp(36px, 5vw, 56px);
+    background:
+      radial-gradient(ellipse 55% 60% at 50% 0%, rgba(52, 211, 153, 0.1), transparent 70%),
+      var(--corvo-bg);
+  }
+
+  .head-inner {
+    max-width: 760px;
+  }
+
+  .head h1 {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    letter-spacing: -0.032em;
+    line-height: 1.05;
+    margin: 0 0 18px;
+  }
+
+  .lede {
+    font-size: clamp(1.02rem, 1.4vw, 1.15rem);
+    margin: 0;
+  }
+
+  .latest {
+    padding: clamp(40px, 6vw, 64px) 0 0;
+  }
+
+  .latest-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.16) 100%), var(--corvo-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    padding: clamp(26px, 4vw, 40px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .latest-badges {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  .pill-latest {
+    background: var(--corvo-selected);
+    color: var(--corvo-accent);
+    border: 1px solid color-mix(in srgb, var(--corvo-accent) 30%, transparent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 6px;
+  }
+
+  .latest-tag {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--corvo-text);
+  }
+
+  .latest-date {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .latest-title {
+    margin: 0 0 20px;
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing: -0.028em;
+    line-height: 1.12;
+  }
+
+  .latest-highlights {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 70ch;
+  }
+
+  .latest-highlights li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--corvo-text-dim);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .latest-highlights svg {
+    color: var(--corvo-accent);
+    flex: none;
+    margin-top: 3px;
+  }
+
+  .dl-heading {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--corvo-text-icon);
+    margin: 0 0 16px;
+  }
+
+  .dl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .dl-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    padding: 18px;
+    text-decoration: none;
+    transition: border-color 140ms ease, transform 140ms var(--ease-out);
+  }
+
+  .dl-card:hover {
+    border-color: rgba(52, 211, 153, 0.4);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  .dl-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .dl-os {
+    font-size: 1rem;
+    font-weight: 650;
+    color: var(--corvo-text);
+  }
+
+  .dl-detail {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .dl-file {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--corvo-text-dim);
+    word-break: break-all;
+  }
+
+  .dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--corvo-accent);
+  }
+
+  .latest-foot {
+    padding-top: 18px;
+  }
+
+  .notes-link,
+  .all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .section {
+    padding: var(--section-y) 0;
+  }
+
+  .prev-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: clamp(28px, 4vw, 44px);
+    padding-bottom: 18px;
+  }
+
+  .prev-head h2 {
+    margin: 0;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    letter-spacing: -0.028em;
+  }
+
+  .prev-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .prev-item {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 28px;
+    background: var(--corvo-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    padding: 26px;
+  }
+
+  .prev-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .prev-tag {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--corvo-text);
+  }
+
+  .prev-date {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .prev-notes {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .prev-title {
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .prev-highlights {
+    margin: 0 0 18px;
+    padding-left: 20px;
+    color: var(--corvo-text-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .prev-dls {
+    padding-top: 14px;
+  }
+
+  .prev-dl-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--corvo-text-icon);
+    margin-bottom: 10px;
+  }
+
+  .prev-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .prev-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--corvo-text-dim);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 6px;
+    padding: 4px 10px;
+    text-decoration: none;
+    transition: color 140ms ease, border-color 140ms ease;
+  }
+
+  .prev-chip:hover {
+    color: var(--corvo-accent);
+    border-color: rgba(52, 211, 153, 0.4);
+    text-decoration: none;
+  }
+
+  @media (max-width: 900px) {
+    .dl-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .prev-item {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .dl-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

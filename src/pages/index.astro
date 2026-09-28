@@ -1,413 +1,1100 @@
 ---
 import Base from "../layouts/Base.astro";
+import WorkflowShowcase from "../components/WorkflowShowcase.astro";
 import PaletteMockup from "../components/PaletteMockup.astro";
-import FeatureList from "../components/FeatureList.astro";
-import DemoTabs from "../components/DemoTabs.astro";
-import DownloadButtons from "../components/DownloadButtons.astro";
-import KeyCap from "../components/KeyCap.astro";
+import AppFrame from "../components/AppFrame.astro";
+import Icon from "../components/Icon.astro";
+import { fetchLatest } from "../data/releases";
 
-const features = [
-  { icon: "app", title: "App Launcher", body: "Fuzzy search with frecency ranking. The apps you use rise to the top." },
-  { icon: "grid", title: "Window Management", body: "Tile into halves, thirds, and quarters. Gaps and layout templates included." },
-  { icon: "clipboard", title: "Clipboard History", body: "Text, code, colors, and images. Searchable, with configurable retention." },
-  { icon: "calc", title: "Calculator", body: "Evaluate expressions inline and keep a calculation history." },
-  { icon: "snippet", title: "Snippets", body: "Insert text templates by keyword, git-diffable TOML under the hood." },
-  { icon: "emoji", title: "Emoji Picker", body: "Search emojis by name with skin-tone selection." },
-  { icon: "link", title: "Quicklinks", body: "Open custom URLs and web searches from the palette." },
-  { icon: "search", title: "File Search", body: "Find files with configurable scopes and ignore rules." },
-  { icon: "sliders", title: "System Actions", body: "Dark mode, audio, displays, and settings panels. No digging through menus." },
-  { icon: "refresh", title: "Auto-Updater", body: "Signature-verified update checks. You decide when to install." },
-];
+const latest = await fetchLatest();
 
-const facts = [
-  { k: "Language", v: "Rust, one native binary per OS" },
-  { k: "UI", v: "GPUI, no embedded browser" },
-  { k: "Search", v: "SIMD fuzzy matching, first-keystroke results" },
-  { k: "Storage", v: "LMDB, no background services" },
+const platforms = [
+  {
+    name: "macOS",
+    tag: "Apple Silicon & Intel",
+    desc: "DMG disk image for Apple Silicon and Intel, or a single-command Homebrew tap.",
+    command: "brew install diegoleteliers10/corvo/corvo",
+    formats: "DMG · Homebrew",
+    href: "https://github.com/diegoleteliers10/corvo/releases/latest",
+  },
+  {
+    name: "Windows",
+    tag: "Windows 10 / 11",
+    desc: "Single-file MSI installer or portable standalone ZIP archive.",
+    formats: "MSI · Portable ZIP",
+    href: "https://github.com/diegoleteliers10/corvo/releases/latest",
+  },
+  {
+    name: "Linux",
+    tag: "Wayland & X11",
+    desc: "Universal AppImage for any distro, or DEB package for Ubuntu and Debian.",
+    formats: "AppImage · DEB",
+    href: "https://github.com/diegoleteliers10/corvo/releases/latest",
+  },
 ];
 ---
 
 <Base
-  title="Corvo — The native launcher for macOS, Linux, and Windows"
-  description="Corvo is a free, open-source launcher written in Rust. Apps, clipboard, windows, and system actions behind one keystroke."
+  title="Corvo | Native desktop launcher for macOS, Windows, and Linux"
+  description="Search apps, find files, calculate math, manage windows, and run desktop actions from one keyboard-driven palette. Corvo is a native launcher written in Rust."
 >
+  <!-- Hero: product promise left, real capture right -->
   <section class="hero">
-    <div class="mark" aria-hidden="true"></div>
-    <div class="wrap">
-      <h1>One keystroke<span class="dot">.</span><br />Everything on your machine<span class="dot">.</span></h1>
-      <p class="lede">
-        Corvo is a native launcher written in Rust. Launch apps, search files,
-        manage windows, and control your system from a single palette on
-        macOS, Linux, and Windows.
-      </p>
-      <div class="cta">
-        <DownloadButtons />
-        <a
-          class="btn btn-ghost"
-          href="https://github.com/diegoleteliers10/corvo"
-          rel="noopener"
-          target="_blank">View source</a
-        >
-      </div>
-      <p class="hint">Summon it from anywhere with <KeyCap keys={["⌥", "Space"]} /> — free and open source, MIT.</p>
-      <div class="shot">
-        <PaletteMockup />
-      </div>
-    </div>
-  </section>
+    <div class="hero-lamp" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <a class="hero-badge" href="/releases">
+          <span class="pulse-pip" aria-hidden="true"></span>
+          <span>{latest.tag}</span>
+          <span class="badge-sep">/</span>
+          <span class="badge-sub">open source</span>
+        </a>
 
-  <div class="ticker" aria-hidden="true">
-    <div class="track">
-      {
-        [0, 1].map(() => (
-          <div class="group">
-            {[
-              ...features.map((f) => f.title),
-              "kill-process",
-              "brew",
-              "pomodoro",
-              "weather",
-              "notes",
-              "media-control",
-              "browser-tabs",
-            ].map((name) => (
-              <span class="titem">
-                <span class="tname">{name}</span>
-                <span class="tsep">·</span>
-              </span>
-            ))}
-          </div>
-        ))
-      }
-    </div>
-  </div>
+        <h1>
+          Everyday desktop tools.
+          <span class="accent-line">One native palette.</span>
+        </h1>
 
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>Everything at your keystroke</h2>
-        <p>Ten core commands ship in the box. No accounts, no telemetry, no helper processes.</p>
-      </div>
-      <FeatureList features={features} />
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="section-head">
-        <h2>See it work</h2>
-        <p>Real layout, real palette — the same surface you will use every day.</p>
-      </div>
-      <DemoTabs />
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap split">
-      <div class="split-copy">
-        <h2>Built like a system tool</h2>
-        <p>
-          Corvo has no runtime plugin system and no embedded browser. Every
-          command is compiled Rust, so the palette stays as light as the day
-          you installed it.
+        <p class="hero-desc">
+          Corvo puts app search, file search, inline math, and system controls in one native
+          palette. Press the shortcut, type a few letters, keep moving.
         </p>
-        <p>
-          Search results appear on the first keystroke thanks to SIMD fuzzy
-          matching, and history lives in LMDB, the storage engine behind some
-          of the fastest databases in production.
-        </p>
-        <a href="/features">Read about the architecture →</a>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary hero-btn" href="/download">
+            <span>Download for free</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          </a>
+
+          <button
+            class="install-pill"
+            id="copy-install-btn"
+            type="button"
+            aria-label="Copy Homebrew install command to clipboard"
+            data-command="brew install diegoleteliers10/corvo/corvo"
+          >
+            <span class="pill-prefix">$</span>
+            <code>brew install diegoleteliers10/corvo/corvo</code>
+            <span class="pill-copy-icon" aria-hidden="true">
+              <svg class="icon-copy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <svg class="icon-check" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none;"><path d="M20 6L9 17l-5-5"/></svg>
+            </span>
+            <span class="copy-tooltip" id="copy-tooltip" role="status" aria-live="polite">Copied to clipboard</span>
+          </button>
+        </div>
+
+        <div class="hero-shortcuts" aria-label="Default keyboard shortcuts">
+          <span class="shortcut-item"><kbd>⌘</kbd><kbd>Space</kbd> macOS</span>
+          <span class="shortcut-bullet">·</span>
+          <span class="shortcut-item"><kbd>Alt</kbd><kbd>Space</kbd> Windows</span>
+          <span class="shortcut-bullet">·</span>
+          <span class="shortcut-item"><kbd>Super</kbd><kbd>Space</kbd> Linux</span>
+        </div>
       </div>
-      <dl class="facts">
-        {
-          facts.map((f) => (
-            <div>
-              <dt>{f.k}</dt>
-              <dd>{f.v}</dd>
+
+      <div class="hero-shot">
+        <AppFrame
+          src="/showcase/app-search-safari.png"
+          alt="Corvo launcher searching for Safari, with the app ranked first"
+          eager
+          variant="bare"
+        />
+      </div>
+    </div>
+
+    <div class="hero-availability">
+      <div class="wrap avail-inner">
+        <div class="avail-group">
+          <span class="avail-indicator" aria-hidden="true"></span>
+          <span>Available on macOS, Windows, and Linux</span>
+        </div>
+        <div class="avail-tags">
+          <span>Homebrew</span>
+          <span>DMG</span>
+          <span>MSI</span>
+          <span>AppImage</span>
+          <span>DEB</span>
+          <span>MIT</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workflow proof: real captures -->
+  <section class="section" id="workflows">
+    <div class="wrap">
+      <div class="section-intro">
+        <h2>Type. See. Done.</h2>
+        <p>
+          Four everyday jobs, captured from Corvo itself. Pick a query to see exactly what the
+          palette shows.
+        </p>
+      </div>
+      <WorkflowShowcase />
+    </div>
+  </section>
+
+  <!-- Interactive palette playground -->
+  <section class="section playground-section" id="playground">
+    <div class="wrap">
+      <div class="section-intro">
+        <h2>Take the palette for a spin.</h2>
+        <p>
+          This is a working replica of the Corvo window. Type an app name, or an arithmetic
+          expression like 24 * 7, and watch the results change.
+        </p>
+      </div>
+      <PaletteMockup />
+    </div>
+  </section>
+
+  <!-- Built-in suite -->
+  <section class="section bento-section" id="features">
+    <div class="wrap">
+      <div class="section-intro">
+        <h2>One launcher. A complete toolset.</h2>
+        <p>
+          Every tool compiles directly into the binary. No scripting runtime. Built-in commands
+          stay local to the application.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <article class="bento-card span-7">
+          <div class="card-visual" aria-hidden="true">
+            <div class="vrow sel">
+              <span class="vtile" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8)">S</span>
+              <span class="vtitle">Safari</span>
+              <span class="vtag">Application</span>
             </div>
-          ))
-        }
-      </dl>
+            <div class="vrow">
+              <span class="vtile" style="background:linear-gradient(135deg, #3d434c, #17191d)">Z</span>
+              <span class="vtitle">Zed</span>
+              <span class="vtag">Application</span>
+            </div>
+            <div class="vrow">
+              <span class="vtile" style="background:linear-gradient(135deg, #10a37f, #0b7a5f)">C</span>
+              <span class="vtitle">ChatGPT</span>
+              <span class="vtag">Application</span>
+            </div>
+            <div class="vrow">
+              <span class="vtile" style="background:linear-gradient(135deg, #f4f4f5, #d4d4d8); color:#18181b">D</span>
+              <span class="vtitle mono">~/Dev/corvo/crates/corvo-core</span>
+              <span class="vtag">Directory</span>
+            </div>
+            <div class="vrow">
+              <span class="vtile" style="background:linear-gradient(135deg, #f472b6, #be185d)">S</span>
+              <span class="vtitle">Slack</span>
+              <span class="vtag">Application</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-icon"><Icon name="search" size={26} /></span>
+            <h3>App and file search</h3>
+            <p>Fuzzy search across installed applications and filesystem paths, with frecency ranking stored locally.</p>
+          </div>
+        </article>
+
+        <article class="bento-card span-5">
+          <div class="card-visual" aria-hidden="true">
+            <div class="vrow clip">
+              <span class="vdot" style="background:#34d399"></span>
+              <span class="vmono">git commit -m "fix: simd ranking"</span>
+              <span class="vtime">2m</span>
+            </div>
+            <div class="vrow clip">
+              <span class="vdot" style="background:#a78bfa"></span>
+              <span class="vmono">#34d399</span>
+              <span class="vtime">14m</span>
+            </div>
+            <div class="vrow clip">
+              <span class="vdot" style="background:#6b7280"></span>
+              <span class="vmono">github.com/diegoleteliers10/corvo</span>
+              <span class="vtime">1h</span>
+            </div>
+            <div class="vrow clip">
+              <span class="vdot" style="background:#34d399"></span>
+              <span class="vmono">brew install diegoleteliers10/corvo/corvo</span>
+              <span class="vtime">3h</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-icon"><Icon name="clipboard" size={26} /></span>
+            <h3>Clipboard and snippets</h3>
+            <p>Clipboard history for text, code, colors, and images, ready to paste again.</p>
+          </div>
+        </article>
+
+        <article class="bento-card span-5">
+          <div class="card-visual tiling" aria-hidden="true">
+            <div class="mini-desktop">
+              <div class="mini-win focus">
+                <span class="win-dots"><i></i><i></i><i></i></span>
+                <span class="win-name">Zed — SPEC.md</span>
+              </div>
+              <div class="mini-win">
+                <span class="win-dots"><i></i><i></i><i></i></span>
+                <span class="win-name mono">cargo build --release</span>
+              </div>
+              <div class="mini-win">
+                <span class="win-dots"><i></i><i></i><i></i></span>
+                <span class="win-name">Preview — localhost:4321</span>
+              </div>
+            </div>
+            <div class="tile-keys">
+              <span><kbd>⌥</kbd><kbd>⌘</kbd><kbd>←</kbd> Left</span>
+              <span><kbd>⌥</kbd><kbd>⌘</kbd><kbd>→</kbd> Right</span>
+              <span><kbd>⌃</kbd><kbd>⌥</kbd><kbd>↵</kbd> Maximize</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-icon"><Icon name="grid" size={26} /></span>
+            <h3>Window tiling</h3>
+            <p>Tile active windows into halves, thirds, or quadrants with rapid shortcuts on macOS.</p>
+          </div>
+        </article>
+
+        <article class="bento-card span-7">
+          <div class="card-visual" aria-hidden="true">
+            <div class="vrow port">
+              <span class="vport">:3000</span>
+              <span class="vtitle">node (vite-dev-server)</span>
+              <span class="vpid">PID 48291</span>
+              <span class="vkill">Kill</span>
+            </div>
+            <div class="vrow port">
+              <span class="vport">:8080</span>
+              <span class="vtitle">cargo run (backend-api)</span>
+              <span class="vpid">PID 32904</span>
+              <span class="vkill">Kill</span>
+            </div>
+            <div class="vrow port">
+              <span class="vport">:5432</span>
+              <span class="vtitle">postgres (local db)</span>
+              <span class="vpid">PID 28107</span>
+              <span class="vkill">Kill</span>
+            </div>
+            <div class="vrow port">
+              <span class="vport">:9222</span>
+              <span class="vtitle">chromium (debug)</span>
+              <span class="vpid">PID 51736</span>
+              <span class="vkill">Kill</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <span class="card-icon"><Icon name="sliders" size={26} /></span>
+            <h3>Ports and processes</h3>
+            <p>Identify hanging dev servers, inspect listening sockets, and stop stray processes from the palette.</p>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
-  <section class="section">
+  <!-- Platforms and installation -->
+  <section class="section" id="platforms">
     <div class="wrap">
-      <div class="section-head">
-        <h2>More commands, compiled in</h2>
+      <div class="section-intro">
+        <h2>Install on your system.</h2>
         <p>
-          New commands land as native crates registered at link time. This
-          batch is in development.
+          Use your package manager, or download signed release binaries straight from GitHub.
+          Formats differ by platform.
         </p>
       </div>
-      <div class="chips">
-        <span class="chip">kill-process</span>
-        <span class="chip">brew</span>
-        <span class="chip">text-utilities</span>
-        <span class="chip">pomodoro</span>
-        <span class="chip">weather</span>
-        <span class="chip">notes</span>
-        <span class="chip">media-control</span>
-        <span class="chip">browser-tabs</span>
+
+      <div class="platforms-grid">
+        {platforms.map((p) => (
+          <article class="platform-card">
+            <div class="platform-head">
+              <h3>{p.name}</h3>
+              <span class="platform-tag">{p.tag}</span>
+            </div>
+            <p class="platform-desc">{p.desc}</p>
+            {"command" in p && (
+              <div class="platform-cmd">
+                <code>{p.command}</code>
+              </div>
+            )}
+            <div class="platform-foot">
+              <span class="platform-formats">{p.formats}</span>
+              <a class="platform-link" href={p.href} rel="noopener" target="_blank">
+                <span>Download</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+              </a>
+            </div>
+          </article>
+        ))}
       </div>
-      <p class="legend">Track progress in the repository, or propose a command of your own.</p>
-      <p style="margin-top: var(--s5);"><a href="/extensions">See the extension roadmap →</a></p>
     </div>
   </section>
 
-  <section class="section cta-band">
-    <div class="band-mark" aria-hidden="true"></div>
-    <div class="wrap center">
-      <h2>Get Corvo</h2>
-      <p class="lede" style="margin-bottom: var(--s6);">Installers for Apple Silicon, Intel, Linux, and Windows.</p>
-      <div class="cta center-cta">
-        <DownloadButtons />
+  <!-- Closing CTA -->
+  <section class="cta-band">
+    <div class="wrap cta-inner">
+      <h2>Open the palette. Keep your hands on the keys.</h2>
+      <div class="cta-actions">
+        <a class="btn btn-primary btn-lg" href="/download">Download Corvo</a>
+        <a class="btn btn-ghost btn-lg" href="https://github.com/diegoleteliers10/corvo" rel="noopener" target="_blank">View source on GitHub</a>
       </div>
+      <p class="cta-facts">Rust · GPUI · MIT license · macOS, Windows, Linux</p>
     </div>
   </section>
 </Base>
 
+<script is:inline>
+  (() => {
+    const copyBtn = document.getElementById("copy-install-btn");
+    const copyTooltip = document.getElementById("copy-tooltip");
+    const iconCopy = copyBtn?.querySelector(".icon-copy");
+    const iconCheck = copyBtn?.querySelector(".icon-check");
+
+    if (!copyBtn || !copyTooltip) return;
+
+    copyBtn.addEventListener("click", async () => {
+      const command = copyBtn.getAttribute("data-command") || "brew install diegoleteliers10/corvo/corvo";
+      try {
+        await navigator.clipboard.writeText(command);
+        copyTooltip.classList.add("visible");
+        if (iconCopy) iconCopy.style.display = "none";
+        if (iconCheck) iconCheck.style.display = "inline-block";
+
+        setTimeout(() => {
+          copyTooltip.classList.remove("visible");
+          if (iconCopy) iconCopy.style.display = "inline-block";
+          if (iconCheck) iconCheck.style.display = "none";
+        }, 2200);
+      } catch (err) {
+        console.error("Clipboard copy failed:", err);
+      }
+    });
+  })();
+</script>
+
 <style>
+  /* ---------------- Hero ---------------- */
   .hero {
     position: relative;
     overflow: hidden;
-    padding: clamp(72px, 10vw, 128px) 0 var(--s8);
-    background:
-      radial-gradient(55% 42% at 50% 0%, color-mix(in srgb, var(--corvo-accent) 8%, transparent), transparent),
-      var(--corvo-bg);
-  }
-  .hero .wrap {
-    position: relative;
-  }
-  .mark {
-    position: absolute;
-    top: -90px;
-    right: -80px;
-    width: min(52vw, 580px);
-    aspect-ratio: 313 / 234;
-    background: url("/brand/corvo-mark.png") center / contain no-repeat;
-    mix-blend-mode: screen;
-    opacity: 0.42;
-    transform: rotate(-6deg);
-    pointer-events: none;
-    user-select: none;
-  }
-  .dot {
-    color: var(--corvo-accent);
-  }
-  .shot {
-    margin-top: clamp(40px, 6vw, 64px);
-    perspective: 1200px;
-  }
-  .shot :global(.palette) {
-    will-change: transform;
-  }
-
-  /* command ticker */
-  .ticker {
-    border-block: 1px solid var(--corvo-divider);
-    background: var(--corvo-surface);
-    overflow: hidden;
-    padding: 14px 0;
-  }
-  .track {
-    display: flex;
-    width: max-content;
-    animation: ticker 48s linear infinite;
-  }
-  .ticker:hover .track {
-    animation-play-state: paused;
-  }
-  .group {
-    display: flex;
-    align-items: center;
-  }
-  .titem {
-    display: inline-flex;
-    align-items: center;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    white-space: nowrap;
-  }
-  .tname {
-    color: var(--corvo-text-dim);
-  }
-  .tsep {
-    color: var(--corvo-accent);
-    padding: 0 18px;
-    opacity: 0.7;
-  }
-  @keyframes ticker {
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
-  .lede {
-    max-width: 52ch;
-  }
-  .cta {
-    display: flex;
-    gap: var(--s3);
-    flex-wrap: wrap;
-    align-items: center;
-    margin: var(--s6) 0 var(--s4);
-  }
-  .hint {
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 0;
-  }
-  .shot {
-    margin-top: clamp(40px, 6vw, 64px);
-  }
-  .split {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr;
-    gap: var(--s8);
-    align-items: center;
-  }
-  .split-copy p {
-    max-width: 52ch;
-  }
-  .facts {
-    margin: 0;
-  }
-  .facts > div {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: var(--s4);
-    padding: var(--s4) 0;
-    border-top: 1px solid var(--corvo-divider);
-  }
-  .facts > div:last-child {
+    padding: clamp(56px, 8vw, 96px) 0 0;
     border-bottom: 1px solid var(--corvo-divider);
   }
-  dt {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--corvo-text-icon);
-    padding-top: 3px;
+
+  .hero-lamp {
+    position: absolute;
+    top: -240px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1100px;
+    height: 560px;
+    background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(52, 211, 153, 0.14), transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
   }
-  dd {
-    margin: 0;
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    gap: clamp(32px, 5vw, 72px);
+    padding-bottom: clamp(48px, 7vw, 88px);
+  }
+
+  .hero-copy {
+    max-width: 560px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 10px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    color: var(--corvo-text);
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    margin-bottom: 26px;
+    text-decoration: none;
+    transition: border-color 140ms ease, background-color 140ms ease;
+  }
+
+  .hero-badge:hover {
+    border-color: rgba(52, 211, 153, 0.35);
+    background: rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+  }
+
+  .pulse-pip {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--corvo-accent);
+    animation: pulse-pip 2.2s infinite;
+  }
+
+  .badge-sep {
+    color: var(--corvo-text-icon);
+    opacity: 0.5;
+  }
+
+  .badge-sub {
+    color: var(--corvo-accent);
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(2.5rem, 4.6vw, 3.9rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.032em;
+    margin: 0 0 20px;
+  }
+
+  .accent-line {
+    display: block;
+    color: var(--corvo-accent);
+  }
+
+  .hero-desc {
+    font-size: clamp(1.02rem, 1.4vw, 1.15rem);
+    line-height: 1.6;
+    color: var(--corvo-text-dim);
+    max-width: 46ch;
+    margin: 0 0 30px;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+
+  .hero-btn {
+    padding: 0.85em 1.5em;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  .install-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%), var(--corvo-pill);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.72em 1.15em;
+    color: var(--corvo-text);
+    font-size: 0.88rem;
+    cursor: pointer;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.09),
+      0 2px 8px rgba(0, 0, 0, 0.3);
+    transition:
+      border-color 140ms ease,
+      background-color 140ms ease,
+      transform 120ms var(--ease-spring);
+  }
+
+  .install-pill:hover {
+    border-color: rgba(52, 211, 153, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .install-pill:active {
+    transform: scale(0.98);
+  }
+
+  .pill-prefix {
+    color: var(--corvo-accent);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+
+  .install-pill code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 0.78rem;
+    color: var(--corvo-text);
+    white-space: nowrap;
+  }
+
+  .pill-copy-icon {
+    display: inline-flex;
+    color: var(--corvo-text-icon);
+    margin-left: 4px;
+    transition: color 140ms ease;
+  }
+
+  .install-pill:hover .pill-copy-icon {
+    color: var(--corvo-accent);
+  }
+
+  .copy-tooltip {
+    position: absolute;
+    bottom: -34px;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: #113c30;
+    color: var(--corvo-accent);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
     font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 160ms ease, transform 160ms var(--ease-spring);
+  }
+
+  .copy-tooltip.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .hero-shortcuts {
+    display: flex;
+    align-items: center;
+    gap: 7px 8px;
+    flex-wrap: wrap;
+    color: var(--corvo-text-icon);
+    font-size: 0.74rem;
+  }
+
+  .shortcut-item kbd {
+    font-size: 0.7rem;
+    padding: 0.14em 0.42em;
+  }
+
+  .shortcut-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .shortcut-bullet {
+    opacity: 0.4;
+  }
+
+  .hero-shot {
+    min-width: 0;
+  }
+
+  .hero-availability {
+    position: relative;
+    padding: 16px 0;
+    border-top: 1px solid var(--corvo-divider);
+    font-size: 0.82rem;
+    color: var(--corvo-text-dim);
+    background: rgba(23, 24, 26, 0.5);
+  }
+
+  .avail-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .avail-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .avail-indicator {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--corvo-accent);
+  }
+
+  .avail-tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .avail-tags span {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  /* ---------------- Sections ---------------- */
+  .section {
+    padding: var(--section-y) 0;
+    border-top: 1px solid var(--corvo-divider);
+  }
+
+  .section-intro {
+    max-width: 640px;
+    margin-bottom: clamp(36px, 6vw, 60px);
+  }
+
+  .section-intro h2 {
+    margin: 0 0 14px;
+    font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+  }
+
+  .section-intro p {
+    font-size: 1.02rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .playground-section {
+    background: linear-gradient(180deg, var(--corvo-surface) 0%, var(--corvo-bg) 100%);
+  }
+
+  /* ---------------- Bento ---------------- */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 22px;
+  }
+
+  .span-7 { grid-column: span 7; }
+  .span-5 { grid-column: span 5; }
+
+  .bento-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 400px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.16) 100%), var(--corvo-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms var(--ease-out);
+  }
+
+  .bento-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .card-visual {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 24px 24px 10px;
+    margin: 0;
+    -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent 99%);
+    mask-image: linear-gradient(180deg, #000 58%, transparent 99%);
+  }
+
+  .card-visual.tiling {
+    gap: 14px;
+    -webkit-mask-image: linear-gradient(180deg, #000 78%, rgba(0, 0, 0, 0.45) 100%);
+    mask-image: linear-gradient(180deg, #000 78%, rgba(0, 0, 0, 0.45) 100%);
+  }
+
+  .vrow {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 50px;
+    padding: 0 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.055);
     font-size: 0.95rem;
   }
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s2);
+
+  .vrow.sel {
+    background: var(--corvo-selected);
+    border-color: color-mix(in srgb, var(--corvo-accent) 30%, transparent);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
   }
-  .chip {
+
+  .vtile {
+    width: 30px;
+    height: 30px;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  .vtitle {
+    color: var(--corvo-text);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .vrow.sel .vtitle {
+    font-weight: 600;
+  }
+
+  .vtitle.mono,
+  .vmono {
     font-family: var(--font-mono);
-    font-size: 0.8rem;
-    border-radius: 99px;
-    padding: 5px 13px;
-    border: 1px solid var(--corvo-divider);
-    background: var(--corvo-pill);
-    color: var(--corvo-text-dim);
-    transition: border-color 140ms ease, color 140ms ease;
-  }
-  .chip:hover {
-    color: var(--corvo-accent);
-    border-color: color-mix(in srgb, var(--corvo-accent) 30%, var(--corvo-divider));
-  }
-  .legend {
     font-size: 0.85rem;
-    color: var(--corvo-text-icon);
-    margin-top: var(--s4);
   }
+
+  .vrow.clip .vmono {
+    color: var(--corvo-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .vtag {
+    margin-left: auto;
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .vdot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .vtime {
+    margin-left: auto;
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .vport {
+    flex: none;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--corvo-accent);
+  }
+
+  .vpid {
+    margin-left: auto;
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .vkill {
+    flex: none;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 99px;
+    padding: 2px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .mini-desktop {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    height: 212px;
+  }
+
+  .mini-win {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 13px;
+    background: #101214;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 10px;
+    font-size: 0.78rem;
+    color: var(--corvo-text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .mini-win.focus {
+    grid-row: 1 / 3;
+    background: linear-gradient(180deg, #123227, #0d221b);
+    border-color: rgba(52, 211, 153, 0.42);
+    color: var(--corvo-text);
+    box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.12), 0 10px 26px rgba(0, 0, 0, 0.35);
+  }
+
+  .win-dots {
+    display: inline-flex;
+    gap: 4px;
+    flex: none;
+  }
+
+  .win-dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .mini-win.focus .win-dots i {
+    background: rgba(52, 211, 153, 0.5);
+  }
+
+  .win-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .win-name.mono {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+  }
+
+  .tile-keys {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    color: var(--corvo-text-dim);
+  }
+
+  .card-body {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 0 34px 32px;
+  }
+
+  .card-icon {
+    color: var(--corvo-accent);
+    display: inline-flex;
+    margin-bottom: 4px;
+  }
+
+  .card-icon svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .card-body h3 {
+    margin: 0;
+    font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+    letter-spacing: -0.025em;
+  }
+
+  .card-body p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    max-width: 52ch;
+  }
+
+  /* ---------------- Platforms ---------------- */
+  .platforms-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .platform-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--corvo-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    padding: 28px;
+    gap: 18px;
+    transition: border-color 140ms ease, transform 140ms var(--ease-spring);
+  }
+
+  .platform-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    transform: translateY(-2px);
+  }
+
+  .platform-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .platform-head h3 {
+    font-size: 1.3rem;
+    letter-spacing: -0.025em;
+    margin: 0;
+  }
+
+  .platform-tag {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--corvo-text-icon);
+  }
+
+  .platform-desc {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .platform-cmd {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+
+  .platform-cmd code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--corvo-text);
+  }
+
+  .platform-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .platform-formats {
+    font-size: 0.8rem;
+    color: var(--corvo-text-dim);
+  }
+
+  .platform-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  /* ---------------- CTA band ---------------- */
   .cta-band {
     position: relative;
     overflow: hidden;
-    background: var(--corvo-surface);
-    padding: calc(var(--section-y) * 1.12) 0;
-  }
-  .cta-band h2 {
-    font-size: clamp(2.1rem, 4.5vw, 3.2rem);
-  }
-  .band-mark {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width: min(46vw, 380px);
-    aspect-ratio: 313 / 234;
-    background: url("/brand/corvo-mark.png") center / contain no-repeat;
-    mix-blend-mode: screen;
-    opacity: 0.4;
-    transform: rotate(-6deg);
-    pointer-events: none;
-  }
-  .cta-band .wrap {
-    position: relative;
-  }
-  @media (max-width: 640px) {
-    .mark {
-      opacity: 0.3;
-      width: 92vw;
-      top: -30px;
-      right: -130px;
-    }
-  }
-  .center {
+    padding: clamp(80px, 11vw, 140px) 0;
+    border-top: 1px solid var(--corvo-divider);
+    background:
+      radial-gradient(ellipse 55% 70% at 50% 115%, rgba(52, 211, 153, 0.13), transparent 70%),
+      var(--corvo-surface);
     text-align: center;
   }
-  .center-cta {
-    justify-content: center;
-    margin: 0;
+
+  .cta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
   }
-  @media (max-width: 860px) {
-    .split {
+
+  .cta-inner h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin: 0;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-lg {
+    padding: 0.9em 1.6em;
+    font-size: 1rem;
+  }
+
+  .cta-facts {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--corvo-text-icon);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------------- Responsive ---------------- */
+  @media (max-width: 960px) {
+    .hero-grid {
       grid-template-columns: 1fr;
-      gap: var(--s7);
+      gap: 40px;
+    }
+
+    .hero-copy {
+      max-width: 600px;
+    }
+
+    .bento-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .span-7,
+    .span-5 {
+      grid-column: auto;
+    }
+
+    .bento-card {
+      min-height: 330px;
+    }
+
+    .card-visual {
+      padding: 26px 26px 8px;
+    }
+
+    .card-body {
+      padding: 0 26px 26px;
+    }
+
+    .platforms-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .avail-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .install-pill code {
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 </style>
-
-<script>
-  // Subtle 3D tilt on the launcher mockup. Decorative: hover-capable
-  // pointers only, honors reduced motion, smoothed with a small lerp.
-  const stage = document.querySelector<HTMLElement>(".shot");
-  const card = stage?.querySelector<HTMLElement>(".palette");
-  const fine =
-    matchMedia("(hover: hover) and (pointer: fine)").matches &&
-    !matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (stage && card && fine) {
-    let raf = 0;
-    let tx = 0;
-    let ty = 0;
-    let cx = 0;
-    let cy = 0;
-
-    const loop = () => {
-      cx += (tx - cx) * 0.12;
-      cy += (ty - cy) * 0.12;
-      card.style.transform = `perspective(1200px) rotateX(${cy.toFixed(2)}deg) rotateY(${cx.toFixed(2)}deg)`;
-      if (Math.abs(tx - cx) > 0.02 || Math.abs(ty - cy) > 0.02) {
-        raf = requestAnimationFrame(loop);
-      } else {
-        raf = 0;
-      }
-    };
-
-    stage.addEventListener("pointermove", (e) => {
-      const r = stage.getBoundingClientRect();
-      tx = ((e.clientX - r.left) / r.width - 0.5) * 6;
-      ty = -((e.clientY - r.top) / r.height - 0.5) * 4;
-      if (!raf) raf = requestAnimationFrame(loop);
-    });
-
-    stage.addEventListener("pointerleave", () => {
-      tx = 0;
-      ty = 0;
-      if (!raf) raf = requestAnimationFrame(loop);
-    });
-  }
-</script>

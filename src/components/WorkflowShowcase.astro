@@ -1,0 +1,249 @@
+---
+// Workflow proof: keyboard-accessible radio tabs swap real Corvo captures
+// inside one shared app-window frame. Zero JS; :has() drives the panels.
+import AppFrame from "./AppFrame.astro";
+
+const workflows = [
+  {
+    id: "apps",
+    query: "Safari",
+    label: "Launch an app",
+    detail: "Type the name. Corvo ranks the app first. Enter opens it.",
+    image: "/showcase/app-search-safari.png",
+    alt: "Corvo search results for Safari with the app selected",
+  },
+  {
+    id: "math",
+    query: "24 * 7",
+    label: "Do the math",
+    detail: "Arithmetic evaluates inline. Enter copies the answer.",
+    image: "/showcase/calculator-quick-math.png",
+    alt: "Corvo calculates 24 times 7 and shows 168",
+  },
+  {
+    id: "emoji",
+    query: "Emoji",
+    label: "Pick an emoji",
+    detail: "Search symbols by keyword. Enter pastes the selection.",
+    image: "/showcase/emoji-picker.png",
+    alt: "Corvo emoji and symbol picker with a grid of results",
+  },
+  {
+    id: "files",
+    query: "Search Files",
+    label: "Find files",
+    detail: "The Search Files command looks through your folders.",
+    image: "/showcase/search-files-command.png",
+    alt: "Corvo search results with the Search Files command selected",
+  },
+];
+---
+
+<div class="wf">
+  <fieldset class="wf-tabs">
+    <legend class="sr-only">Choose a workflow</legend>
+    {workflows.map((w, i) => (
+      <label class="wf-tab" for={`wf-${w.id}`}>
+        <input id={`wf-${w.id}`} type="radio" name="wf" value={w.id} checked={i === 0} />
+        <span class="tab-inner">
+          <code>{w.query}</code>
+          <span class="tab-label">{w.label}</span>
+        </span>
+      </label>
+    ))}
+  </fieldset>
+
+  <div class="wf-stage">
+    {workflows.map((w) => (
+      <section class="wf-panel" data-panel={w.id} aria-label={w.label}>
+        <AppFrame src={w.image} alt={w.alt} eager={w.id === "apps"} variant="bare" />
+        <p class="wf-caption">
+          <code>{w.query}</code>
+          <span>{w.detail}</span>
+        </p>
+      </section>
+    ))}
+  </div>
+</div>
+
+<style>
+  .wf {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .wf-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 clamp(28px, 4vw, 44px);
+    padding: 0;
+    border: 0;
+  }
+
+  .wf-tab {
+    cursor: pointer;
+  }
+
+  .wf-tab input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .tab-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 15px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--corvo-text-dim);
+    font-size: 0.88rem;
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease,
+      transform 130ms var(--ease-spring);
+  }
+
+  .tab-inner code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 0.82rem;
+    color: var(--corvo-text-dim);
+  }
+
+  .wf-tab:hover .tab-inner {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--corvo-text);
+    transform: translateY(-1px);
+  }
+
+  .wf-tab:active .tab-inner {
+    transform: scale(0.98);
+  }
+
+  .wf-tab:has(input:checked) .tab-inner {
+    background: var(--corvo-selected);
+    border-color: color-mix(in srgb, var(--corvo-accent) 38%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .wf-tab:has(input:checked) .tab-inner code {
+    color: var(--corvo-accent);
+    font-weight: 600;
+  }
+
+  .wf-tab:has(input:checked) .tab-label {
+    color: #ffffff;
+  }
+
+  .wf-tab:has(input:focus-visible) .tab-inner {
+    outline: 2px solid var(--corvo-accent);
+    outline-offset: 2px;
+  }
+
+  .wf-stage {
+    display: grid;
+  }
+
+  .wf-panel {
+    grid-area: 1 / 1;
+    min-width: 0;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px) scale(0.992);
+    pointer-events: none;
+    transition:
+      opacity 300ms var(--ease-out),
+      transform 420ms var(--ease-out),
+      visibility 0s linear 300ms;
+  }
+
+  .wf-panel:first-child {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  @supports selector(:has(*)) {
+    .wf:has(input:checked) .wf-panel {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px) scale(0.992);
+      pointer-events: none;
+    }
+
+    .wf:has(input[value="apps"]:checked) [data-panel="apps"],
+    .wf:has(input[value="math"]:checked) [data-panel="math"],
+    .wf:has(input[value="emoji"]:checked) [data-panel="emoji"],
+    .wf:has(input[value="files"]:checked) [data-panel="files"] {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      pointer-events: auto;
+      transition:
+        opacity 300ms var(--ease-out),
+        transform 420ms var(--ease-out),
+        visibility 0s;
+    }
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.988);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .wf-caption {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 4px;
+    font-size: 0.95rem;
+    color: var(--corvo-text-dim);
+  }
+
+  .wf-caption code {
+    background: var(--corvo-pill);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 7px;
+    padding: 0.2em 0.65em;
+    font-size: 0.85rem;
+    color: var(--corvo-accent);
+  }
+
+  @media (max-width: 640px) {
+    .wf-tabs {
+      justify-content: flex-start;
+    }
+    .tab-label {
+      display: none;
+    }
+  }
+</style>

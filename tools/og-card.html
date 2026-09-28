@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1200px;
+    height: 630px;
+    background: #0e0f10;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .lamp {
+    position: absolute;
+    top: -260px;
+    left: 8%;
+    width: 900px;
+    height: 520px;
+    background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(52, 211, 153, 0.16), transparent 70%);
+    filter: blur(50px);
+  }
+  .glow {
+    position: absolute;
+    right: 40px;
+    top: 60px;
+    width: 560px;
+    height: 480px;
+    background: radial-gradient(ellipse 55% 50% at 50% 45%, rgba(52, 211, 153, 0.2), transparent 70%);
+    filter: blur(36px);
+  }
+  .copy { width: 560px; padding-left: 84px; position: relative; }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+  .brand img { width: 44px; height: 44px; border-radius: 10px; }
+  .brand span { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+  h1 { font-size: 66px; line-height: 1.04; letter-spacing: -0.032em; font-weight: 700; }
+  h1 .acc { color: #34d399; }
+  .sub { margin-top: 20px; font-size: 23px; line-height: 1.5; color: #9a9aa5; max-width: 30ch; }
+  .facts { margin-top: 26px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 16px; letter-spacing: 0.04em; color: #8e8e93; }
+  .facts b { color: #34d399; font-weight: 600; }
+  .win {
+    position: relative;
+    width: 520px;
+    margin-left: 20px;
+    background: rgba(20, 21, 23, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 16px;
+    box-shadow: 0 40px 90px -18px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+  }
+  .search { display: flex; align-items: center; gap: 14px; padding: 20px 22px 12px; font-size: 24px; font-weight: 500; }
+  .search .caret { width: 3px; height: 26px; background: #34d399; }
+  .rlab { padding: 0 22px 8px; font-size: 14px; font-weight: 600; color: #8e8e93; }
+  .row { display: flex; align-items: center; gap: 13px; margin: 0 12px 4px; padding: 11px 14px; border-radius: 10px; font-size: 19px; }
+  .row.sel { background: #113c30; }
+  .tile { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex: none; }
+  .tag { margin-left: auto; font-size: 15px; color: #8e8e93; font-family: ui-monospace, Menlo, monospace; }
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 16px; }
+  .pill { display: flex; align-items: center; gap: 9px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); border-radius: 999px; padding: 7px 14px; font-size: 15px; font-weight: 600; }
+  .pill .dim { color: #9a9aa5; font-weight: 500; }
+  .menu { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); }
+</style>
+</head>
+<body>
+  <div class="lamp"></div>
+  <div class="glow"></div>
+  <div class="copy">
+    <div class="brand"><img src="../public/brand/corvo-icon.png" alt="" /><span>corvo</span></div>
+    <h1>Everyday desktop tools.<br /><span class="acc">One native palette.</span></h1>
+    <p class="sub">App search, files, math and system controls from one keyboard-driven launcher.</p>
+    <p class="facts"><b>Free · MIT</b> &nbsp;·&nbsp; macOS · Windows · Linux</p>
+  </div>
+  <div class="win">
+    <div class="search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="M15.5 15.5 20 20"/></svg>&nbsp; Safari<span class="caret"></span></div>
+    <div class="rlab">Results</div>
+    <div class="row sel"><span class="tile" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">S</span> Safari <span class="tag">Application</span></div>
+    <div class="row"><span class="tile" style="background:linear-gradient(135deg,#3d434c,#17191d)">Z</span> Zed <span class="tag">Application</span></div>
+    <div class="row"><span class="tile" style="background:linear-gradient(135deg,#10a37f,#0b7a5f)">C</span> ChatGPT <span class="tag">Application</span></div>
+    <div class="bar"><span class="menu"></span><span class="pill">Open Application <span class="dim">⏎</span> <span class="dim">|</span> <span class="dim">Actions ⌘K</span></span></div>
+  </div>
+</body>
+</html>

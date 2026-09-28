@@ -1,119 +1,519 @@
 ---
 import Base from "../layouts/Base.astro";
-import DownloadButtons from "../components/DownloadButtons.astro";
 import KeyCap from "../components/KeyCap.astro";
+import { fetchLatest } from "../data/releases";
 
-const releases = "https://github.com/diegoleteliers10/corvo/releases/latest";
+const latest = await fetchLatest();
+
+const appImageName =
+  latest.downloads.find((d) => d.filename.endsWith(".AppImage"))?.filename ??
+  "Corvo_<version>_amd64.AppImage";
+
+const tabs = [
+  {
+    id: "macos",
+    label: "macOS",
+    command: "brew install diegoleteliers10/corvo/corvo",
+    hint: "Apple Silicon & Intel · or grab the DMG for your architecture below.",
+  },
+  {
+    id: "windows",
+    label: "Windows",
+    command: "",
+    hint: "Windows 10 / 11 · no admin required for the portable ZIP.",
+  },
+  {
+    id: "linux",
+    label: "Linux",
+    command: `chmod +x ${appImageName}`,
+    hint: "Wayland & X11 · AppImage runs anywhere, DEB fits Ubuntu and Debian.",
+  },
+  {
+    id: "source",
+    label: "From source",
+    command: "git clone https://github.com/diegoleteliers10/corvo && cd corvo && cargo build --release",
+    hint: "Rust 1.80 or newer · on Linux you need the Wayland development packages.",
+  },
+];
+
+const forOs = (os: "macos" | "windows" | "linux") =>
+  latest.downloads.filter((d) => d.os === os);
 ---
 
 <Base
   title="Download — Corvo"
-  description="Install Corvo on macOS with Homebrew, on Linux with AppImage or deb, and on Windows with MSI. Or build from source."
+  description="Install Corvo on macOS with Homebrew or DMG, on Windows with MSI or portable ZIP, and on Linux with AppImage or DEB. Or build from source."
 >
   <section class="head">
     <div class="wrap">
+      <a class="version-badge" href="/releases">
+        <span class="pulse-pip" aria-hidden="true"></span>
+        <span>{latest.tag}</span>
+        <span class="badge-sep">/</span>
+        <span class="badge-sub">latest release</span>
+      </a>
       <h1>Get Corvo on every OS</h1>
-      <div class="cta">
-        <DownloadButtons />
+      <p class="lede">
+        Pick your system, run one command or grab a file. Every build comes
+        straight from GitHub, free under the MIT license.
+      </p>
+    </div>
+  </section>
+
+  <section class="install">
+    <div class="wrap">
+      <div class="install-card">
+        <div class="install-tabs" role="tablist" aria-label="Install method by platform">
+          {tabs.map((t, i) => (
+            <button
+              class="install-tab"
+              role="tab"
+              type="button"
+              data-tab={t.id}
+              aria-selected={i === 0 ? "true" : "false"}
+              data-active={i === 0 ? "true" : undefined}
+            >
+              {t.label}
+            </button>
+          ))}
+          <span class="install-indicator" aria-hidden="true"></span>
+        </div>
+
+        {tabs.map((t, i) => (
+          <div
+            class="install-pane"
+            role="tabpanel"
+            data-pane={t.id}
+            hidden={i !== 0}
+          >
+            {t.command !== "" ? (
+              <div class="cmd-row">
+                <span class="cmd-prompt" aria-hidden="true">$</span>
+                <code class="cmd-code">{t.command}</code>
+                <button class="cmd-copy" type="button" data-copy={t.command} aria-label={`Copy ${t.label} install command`}>
+                  <svg class="ic-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  <svg class="ic-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none;"><path d="M20 6L9 17l-5-5"/></svg>
+                  <span class="copy-label">Copy</span>
+                </button>
+              </div>
+            ) : (
+              <div class="pane-downloads">
+                {forOs("windows").map((d) => (
+                  <a class="btn btn-ghost dl-btn" href={d.url} rel="noopener" target="_blank">
+                    <span>{d.detail}</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                  </a>
+                ))}
+              </div>
+            )}
+            <p class="pane-hint">{t.hint}</p>
+          </div>
+        ))}
       </div>
+      <p class="install-foot">
+        Prefer every file at once? All {latest.downloads.length} artifacts for {latest.tag} are
+        listed below, with older versions on the <a href="/releases">releases page</a>.
+      </p>
     </div>
   </section>
 
   <section class="section">
-    <div class="wrap grid">
-      <article>
-        <h3>macOS</h3>
-        <p>Homebrew, signed DMG for Apple Silicon and Intel.</p>
-        <pre><code>brew install diegoleteliers10/corvo/corvo</code></pre>
-        <p class="alt">Or grab the <a href={releases} rel="noopener" target="_blank">.dmg</a> from Releases.</p>
-      </article>
-      <article>
-        <h3>Linux</h3>
-        <p>AppImage for most distros, .deb for Debian and Ubuntu.</p>
-        <p class="alt">
-          Download the <a href={releases} rel="noopener" target="_blank">.AppImage</a>
-          or <a href={releases} rel="noopener" target="_blank">.deb</a> from Releases,
-          then bind <code>corvo --toggle</code> to a shortcut in your compositor.
-        </p>
-      </article>
-      <article>
-        <h3>Windows</h3>
-        <p>MSI installer or a portable .zip, no admin required.</p>
-        <p class="alt">
-          Download the <a href={releases} rel="noopener" target="_blank">.msi</a>
-          or <a href={releases} rel="noopener" target="_blank">.zip</a> from Releases.
-        </p>
-      </article>
-      <article>
-        <h3>From source</h3>
-        <p>Rust 1.80 or newer. On Linux you need Wayland development packages.</p>
-        <pre><code>git clone https://github.com/diegoleteliers10/corvo
-cd corvo && cargo build --release</code></pre>
-      </article>
+    <div class="wrap">
+      <div class="section-intro">
+        <h2>Every file in {latest.tag}.</h2>
+        <p>Direct downloads from GitHub. Pick the format that fits your system.</p>
+      </div>
+      <div class="files-grid">
+        {latest.downloads.map((d) => (
+          <a class="file-card" href={d.url} rel="noopener" target="_blank">
+            <div class="file-top">
+              <span class="file-os">{d.platform}</span>
+              <span class="file-detail">{d.detail}</span>
+            </div>
+            <div class="file-name">{d.filename}</div>
+            <span class="file-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+              Download
+            </span>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
       <h2>First run</h2>
-      <p style="max-width: 64ch;">
-        Launch Corvo and toggle the palette with <KeyCap keys={["⌥", "Space"]} />.
-        Run the binary again at any time to hide it. On macOS, grant the
-        Accessibility permission when prompted so window tiling works.
+      <p class="firstrun">
+        Launch Corvo, then toggle the palette with
+        <KeyCap keys={["⌘", "Space"]} /> on macOS or
+        <KeyCap keys={["Alt", "Space"]} /> on Windows and Linux.
+        On macOS, grant the Accessibility permission when prompted so window tiling works.
       </p>
     </div>
   </section>
 </Base>
 
+<script is:inline>
+  (() => {
+    const tabBtns = Array.from(document.querySelectorAll(".install-tab"));
+    const panes = Array.from(document.querySelectorAll(".install-pane"));
+    const indicator = document.querySelector(".install-indicator");
+
+    const moveIndicator = (tab, instant = false) => {
+      if (!indicator || !tab || !tab.parentElement) return;
+      indicator.style.transition = instant ? "none" : "";
+      const parentRect = tab.parentElement.getBoundingClientRect();
+      const rect = tab.getBoundingClientRect();
+      indicator.style.width = `${rect.width}px`;
+      indicator.style.transform = `translateX(${rect.left - parentRect.left}px)`;
+      if (instant) {
+        void indicator.offsetWidth;
+        indicator.style.transition = "";
+      }
+    };
+
+    const select = (id, instant = false) => {
+      tabBtns.forEach((b) => {
+        const on = b.getAttribute("data-tab") === id;
+        if (on) { b.setAttribute("data-active", "true"); b.setAttribute("aria-selected", "true"); }
+        else { b.removeAttribute("data-active"); b.setAttribute("aria-selected", "false"); }
+        if (on) moveIndicator(b, instant);
+      });
+      panes.forEach((p) => {
+        p.hidden = p.getAttribute("data-pane") !== id;
+      });
+    };
+
+    tabBtns.forEach((b) =>
+      b.addEventListener("click", () => select(b.getAttribute("data-tab") || "macos"))
+    );
+    const first = tabBtns[0];
+    if (first) select(first.getAttribute("data-tab") || "macos", true);
+    window.addEventListener("resize", () => {
+      const active = tabBtns.find((b) => b.hasAttribute("data-active")) || first;
+      if (active) moveIndicator(active, true);
+    });
+
+    document.querySelectorAll(".cmd-copy").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const text = btn.getAttribute("data-copy") || "";
+        const label = btn.querySelector(".copy-label");
+        const icCopy = btn.querySelector(".ic-copy");
+        const icCheck = btn.querySelector(".ic-check");
+        try {
+          await navigator.clipboard.writeText(text);
+          if (label) label.textContent = "Copied";
+          if (icCopy) icCopy.style.display = "none";
+          if (icCheck) icCheck.style.display = "inline-block";
+          setTimeout(() => {
+            if (label) label.textContent = "Copy";
+            if (icCopy) icCopy.style.display = "inline-block";
+            if (icCheck) icCheck.style.display = "none";
+          }, 1600);
+        } catch (err) {
+          console.error("Clipboard copy failed:", err);
+        }
+      });
+    });
+  })();
+</script>
+
 <style>
   .head {
-    padding: clamp(64px, 9vw, 112px) 0 var(--s7);
+    padding: clamp(64px, 9vw, 112px) 0 clamp(36px, 5vw, 56px);
+    background:
+      radial-gradient(ellipse 55% 60% at 50% 0%, rgba(52, 211, 153, 0.1), transparent 70%),
+      var(--corvo-bg);
+    border-bottom: 1px solid var(--corvo-divider);
   }
-  .cta {
-    margin-top: var(--s6);
+
+  .version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 10px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--corvo-text);
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    margin-bottom: 26px;
+    text-decoration: none;
+    transition: border-color 140ms ease;
   }
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s5);
+
+  .version-badge:hover {
+    border-color: rgba(52, 211, 153, 0.35);
+    text-decoration: none;
   }
-  article {
-    border-top: 1px solid var(--corvo-divider);
-    padding-top: var(--s5);
+
+  .pulse-pip {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--corvo-accent);
+    animation: pulse-pip 2.2s infinite;
   }
-  h3 {
-    margin-bottom: var(--s2);
+
+  .badge-sep { color: var(--corvo-text-icon); opacity: 0.5; }
+  .badge-sub { color: var(--corvo-accent); }
+
+  .head h1 {
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    letter-spacing: -0.032em;
+    line-height: 1.05;
+    margin: 0 0 18px;
   }
-  article > p {
-    font-size: 0.92rem;
+
+  .lede {
+    font-size: clamp(1.02rem, 1.4vw, 1.15rem);
+    max-width: 56ch;
+    margin: 0;
   }
-  pre {
-    background: var(--corvo-menu);
-    border: 1px solid var(--corvo-divider);
-    border-radius: 10px;
-    padding: var(--s4);
+
+  .install {
+    padding: clamp(40px, 6vw, 64px) 0;
+  }
+
+  .install-card {
+    background: var(--corvo-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    max-width: 920px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .install-tabs {
+    position: relative;
+    display: flex;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.25);
     overflow-x: auto;
-    margin: var(--s4) 0 0;
   }
-  pre code {
-    background: none;
+
+  .install-tab {
+    padding: 14px 22px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--corvo-text-icon);
+    background: transparent;
     border: none;
-    padding: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 140ms ease, background-color 140ms ease;
+  }
+
+  .install-tab:hover {
+    color: var(--corvo-text);
+  }
+
+  .install-tab[data-active="true"] {
+    color: var(--corvo-text);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .install-indicator {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--corvo-accent);
+    transition: transform 200ms var(--ease-out);
+    pointer-events: none;
+  }
+
+  .install-pane {
+    padding: 26px 24px 22px;
+  }
+
+  .install-pane[hidden] {
+    display: none;
+  }
+
+  .cmd-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
     font-size: 0.85rem;
   }
-  @media (max-width: 560px) {
-    pre code {
-      white-space: pre-wrap;
-      word-break: break-word;
+
+  .cmd-prompt {
+    color: var(--corvo-accent);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    user-select: none;
+    flex: none;
+  }
+
+  .cmd-code {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: var(--corvo-text);
+    font-size: 0.82rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .cmd-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--corvo-text-icon);
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    flex: none;
+    transition: color 140ms ease, border-color 140ms ease;
+  }
+
+  .cmd-copy:hover {
+    color: var(--corvo-accent);
+    border-color: rgba(52, 211, 153, 0.4);
+  }
+
+  .pane-downloads {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pane-hint {
+    margin: 14px 0 0;
+    font-size: 0.85rem;
+  }
+
+  .install-foot {
+    margin-top: 22px;
+    font-size: 0.88rem;
+    max-width: 920px;
+  }
+
+  .section {
+    padding: var(--section-y) 0;
+    border-top: 1px solid var(--corvo-divider);
+  }
+
+  .section-intro {
+    max-width: 640px;
+    margin-bottom: clamp(32px, 5vw, 52px);
+  }
+
+  .section-intro h2 {
+    margin: 0 0 14px;
+    font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+  }
+
+  .section-intro p {
+    margin: 0;
+    font-size: 1.02rem;
+  }
+
+  .files-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .file-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--corvo-surface);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius);
+    padding: 22px;
+    text-decoration: none;
+    transition: border-color 140ms ease, transform 140ms var(--ease-out);
+  }
+
+  .file-card:hover {
+    border-color: rgba(52, 211, 153, 0.4);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  .file-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .file-os {
+    font-size: 1.05rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    color: var(--corvo-text);
+  }
+
+  .file-detail {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--corvo-text-icon);
+  }
+
+  .file-name {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--corvo-text-dim);
+    word-break: break-all;
+  }
+
+  .file-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--corvo-accent);
+  }
+
+  .firstrun {
+    max-width: 64ch;
+    font-size: 1.02rem;
+  }
+
+  @media (max-width: 900px) {
+    .files-grid {
+      grid-template-columns: 1fr 1fr;
     }
   }
-  .alt {
-    margin-top: var(--s3);
-  }
-  @media (max-width: 760px) {
-    .grid {
+
+  @media (max-width: 600px) {
+    .files-grid {
       grid-template-columns: 1fr;
-      gap: var(--s6);
+    }
+
+    .cmd-code {
+      font-size: 0.72rem;
     }
   }
 </style>
