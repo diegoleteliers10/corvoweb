@@ -251,10 +251,12 @@ const previousReleases = releases.slice(1);
     transition: border-color 140ms ease, transform 140ms var(--ease-out);
   }
 
-  .dl-card:hover {
-    border-color: rgba(52, 211, 153, 0.4);
-    transform: translateY(-2px);
-    text-decoration: none;
+  @media (hover: hover) and (pointer: fine) {
+    .dl-card:hover {
+      border-color: rgba(52, 211, 153, 0.4);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
   }
 
   .dl-top {

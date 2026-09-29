@@ -95,7 +95,7 @@ const EMOJI = [
 const chips = ["cal", "safari", "24 * 7", "kill :3000", "emoji 🚀", "window left"];
 ---
 
-<div class="pl-container">
+<div class="pl-container" data-reveal data-ambient>
   <div class="pl-ambient" aria-hidden="true"></div>
 
   <div class="pl-chips" aria-label="Quick launcher examples">
@@ -451,6 +451,18 @@ const chips = ["cal", "safari", "24 * 7", "kill :3000", "emoji 🚀", "window le
     filter: blur(42px);
     pointer-events: none;
     z-index: 0;
+    animation: palette-aurora 11s var(--ease-in-out) infinite alternate;
+    animation-play-state: paused;
+  }
+
+  .pl-container[data-ambient-active] .pl-ambient {
+    animation-play-state: running;
+  }
+
+  @keyframes palette-aurora {
+    0% { opacity: 0.55; transform: translate3d(-4%, 2%, 0) scale(0.92); }
+    48% { opacity: 1; transform: translate3d(5%, -6%, 0) scale(1.08); }
+    100% { opacity: 0.64; transform: translate3d(11%, 2%, 0) scale(0.96); }
   }
 
   .pl-chips {
@@ -479,7 +491,7 @@ const chips = ["cal", "safari", "24 * 7", "kill :3000", "emoji 🚀", "window le
     border-radius: 6px;
     padding: 3px 8px;
     cursor: pointer;
-    transition: all 120ms var(--ease-spring);
+    transition: background-color 120ms var(--ease-out), border-color 120ms var(--ease-out);
   }
 
   .pl-chip code {

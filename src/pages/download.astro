@@ -254,7 +254,6 @@ const forOs = (os: "macos" | "windows" | "linux") =>
     height: 7px;
     border-radius: 50%;
     background: var(--corvo-accent);
-    animation: pulse-pip 2.2s infinite;
   }
 
   .badge-sep { color: var(--corvo-text-icon); opacity: 0.5; }
@@ -330,10 +329,25 @@ const forOs = (os: "macos" | "windows" | "linux") =>
 
   .install-pane {
     padding: 26px 24px 22px;
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 160ms var(--ease-out),
+      transform 160ms var(--ease-out),
+      display 160ms allow-discrete;
+    transition-behavior: allow-discrete;
   }
 
   .install-pane[hidden] {
     display: none;
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .install-pane {
+      transition-property: opacity, display !important;
+    }
   }
 
   .cmd-row {
@@ -453,10 +467,12 @@ const forOs = (os: "macos" | "windows" | "linux") =>
     transition: border-color 140ms ease, transform 140ms var(--ease-out);
   }
 
-  .file-card:hover {
-    border-color: rgba(52, 211, 153, 0.4);
-    transform: translateY(-2px);
-    text-decoration: none;
+  @media (hover: hover) and (pointer: fine) {
+    .file-card:hover {
+      border-color: rgba(52, 211, 153, 0.4);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
   }
 
   .file-top {

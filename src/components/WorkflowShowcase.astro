@@ -1,6 +1,6 @@
 ---
 // Workflow proof: keyboard-accessible radio tabs swap real Corvo captures
-// inside one shared app-window frame. Zero JS; :has() drives the panels.
+// inside one shared app-window frame. :has() drives the panels.
 import AppFrame from "./AppFrame.astro";
 
 const workflows = [
@@ -39,7 +39,7 @@ const workflows = [
 ];
 ---
 
-<div class="wf">
+<div class="wf" data-reveal>
   <fieldset class="wf-tabs">
     <legend class="sr-only">Choose a workflow</legend>
     {workflows.map((w, i) => (
@@ -51,6 +51,7 @@ const workflows = [
         </span>
       </label>
     ))}
+    <button class="wf-playback" type="button" hidden>Pause</button>
   </fieldset>
 
   <div class="wf-stage">
@@ -65,6 +66,75 @@ const workflows = [
     ))}
   </div>
 </div>
+
+<script is:inline>
+  (() => {
+    const showcase = document.querySelector(".wf");
+    if (!showcase) return;
+
+    const options = [...showcase.querySelectorAll('.wf-tab input[type="radio"]')];
+    const playback = showcase.querySelector(".wf-playback");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const cycleDelay = 4500;
+    const selectionDelay = 6500;
+    let visible = false;
+    let paused = false;
+    let timer = 0;
+
+    const keyboardFocus = () => options.some((option) => option.matches(":focus-visible"));
+    const syncPlayback = () => {
+      playback.hidden = reducedMotion.matches;
+      playback.textContent = paused ? "Play" : "Pause";
+    };
+    const schedule = (delay) => {
+      window.clearTimeout(timer);
+      if (!visible || document.hidden || reducedMotion.matches || paused || keyboardFocus()) return;
+
+      timer = window.setTimeout(() => {
+        const current = options.findIndex((option) => option.checked);
+        options[(current + 1) % options.length].checked = true;
+        schedule(cycleDelay);
+      }, delay);
+    };
+
+    showcase.addEventListener("change", (event) => {
+      if (options.includes(event.target)) schedule(selectionDelay);
+    });
+    showcase.addEventListener("click", (event) => {
+      if (event.target.closest(".wf-tab")) schedule(selectionDelay);
+    });
+    showcase.addEventListener("focusin", (event) => {
+      if (!options.includes(event.target)) return;
+      window.clearTimeout(timer);
+    });
+    showcase.addEventListener("focusout", (event) => {
+      if (!options.includes(event.target)) return;
+      window.setTimeout(() => schedule(selectionDelay), 0);
+    });
+    playback.addEventListener("click", () => {
+      paused = !paused;
+      syncPlayback();
+      schedule(cycleDelay);
+    });
+    document.addEventListener("visibilitychange", () => schedule(cycleDelay));
+    reducedMotion.addEventListener("change", () => {
+      syncPlayback();
+      schedule(cycleDelay);
+    });
+    syncPlayback();
+
+    if (!("IntersectionObserver" in window)) {
+      visible = true;
+      schedule(cycleDelay);
+      return;
+    }
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      schedule(cycleDelay);
+    }, { threshold: 0.15 }).observe(showcase);
+  })();
+</script>
 
 <style>
   .wf {
@@ -93,6 +163,28 @@ const workflows = [
 
   .wf-tab {
     cursor: pointer;
+  }
+
+  .wf-playback {
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--corvo-text-dim);
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+
+  .wf-playback[hidden] {
+    display: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .wf-playback:hover {
+      color: var(--corvo-text);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
   }
 
   .wf-tab input {
@@ -129,10 +221,12 @@ const workflows = [
     color: var(--corvo-text-dim);
   }
 
-  .wf-tab:hover .tab-inner {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--corvo-text);
-    transform: translateY(-1px);
+  @media (hover: hover) and (pointer: fine) {
+    .wf-tab:hover .tab-inner {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--corvo-text);
+      transform: translateY(-1px);
+    }
   }
 
   .wf-tab:active .tab-inner {
@@ -173,7 +267,7 @@ const workflows = [
     pointer-events: none;
     transition:
       opacity 300ms var(--ease-out),
-      transform 420ms var(--ease-out),
+      transform 260ms var(--ease-out),
       visibility 0s linear 300ms;
   }
 
@@ -202,7 +296,7 @@ const workflows = [
       pointer-events: auto;
       transition:
         opacity 300ms var(--ease-out),
-        transform 420ms var(--ease-out),
+        transform 260ms var(--ease-out),
         visibility 0s;
     }
   }
@@ -227,6 +321,28 @@ const workflows = [
     margin-top: 4px;
     font-size: 0.95rem;
     color: var(--corvo-text-dim);
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 220ms var(--ease-out),
+      transform 220ms var(--ease-out);
+  }
+
+  .wf-panel:first-child .wf-caption {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 90ms;
+  }
+
+  @supports selector(:has(*)) {
+    .wf:has(input[value="apps"]:checked) [data-panel="apps"] .wf-caption,
+    .wf:has(input[value="math"]:checked) [data-panel="math"] .wf-caption,
+    .wf:has(input[value="emoji"]:checked) [data-panel="emoji"] .wf-caption,
+    .wf:has(input[value="files"]:checked) [data-panel="files"] .wf-caption {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 90ms;
+    }
   }
 
   .wf-caption code {

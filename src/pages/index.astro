@@ -39,7 +39,7 @@ const platforms = [
   description="Search apps, find files, calculate math, manage windows, and run desktop actions from one keyboard-driven palette. Corvo is a native launcher written in Rust."
 >
   <!-- Hero: product promise left, real capture right -->
-  <section class="hero">
+  <section class="hero" data-ambient>
     <div class="hero-lamp" aria-hidden="true"></div>
     <div class="wrap hero-grid">
       <div class="hero-copy">
@@ -123,7 +123,7 @@ const platforms = [
   <!-- Workflow proof: real captures -->
   <section class="section" id="workflows">
     <div class="wrap">
-      <div class="section-intro">
+      <div class="section-intro" data-reveal>
         <h2>Type. See. Done.</h2>
         <p>
           Four everyday jobs, captured from Corvo itself. Pick a query to see exactly what the
@@ -137,7 +137,7 @@ const platforms = [
   <!-- Interactive palette playground -->
   <section class="section playground-section" id="playground">
     <div class="wrap">
-      <div class="section-intro">
+      <div class="section-intro" data-reveal>
         <h2>Take the palette for a spin.</h2>
         <p>
           This is a working replica of the Corvo window. Type an app name, or an arithmetic
@@ -151,7 +151,7 @@ const platforms = [
   <!-- Built-in suite -->
   <section class="section bento-section" id="features">
     <div class="wrap">
-      <div class="section-intro">
+      <div class="section-intro" data-reveal>
         <h2>One launcher. A complete toolset.</h2>
         <p>
           Every tool compiles directly into the binary. No scripting runtime. Built-in commands
@@ -160,7 +160,7 @@ const platforms = [
       </div>
 
       <div class="bento-grid">
-        <article class="bento-card span-7">
+        <article class="bento-card span-7 demo-search" data-reveal data-ambient style="--reveal-delay: 0ms">
           <div class="card-visual" aria-hidden="true">
             <div class="vrow sel">
               <span class="vtile" style="background:linear-gradient(135deg, #3b82f6, #1d4ed8)">S</span>
@@ -187,6 +187,7 @@ const platforms = [
               <span class="vtitle">Slack</span>
               <span class="vtag">Application</span>
             </div>
+            <span class="search-beam"></span>
           </div>
           <div class="card-body">
             <span class="card-icon"><Icon name="search" size={26} /></span>
@@ -195,12 +196,15 @@ const platforms = [
           </div>
         </article>
 
-        <article class="bento-card span-5">
+        <article class="bento-card span-5 demo-clipboard" data-reveal data-ambient style="--reveal-delay: 60ms">
           <div class="card-visual" aria-hidden="true">
             <div class="vrow clip">
               <span class="vdot" style="background:#34d399"></span>
               <span class="vmono">git commit -m "fix: simd ranking"</span>
-              <span class="vtime">2m</span>
+              <span class="clip-meta">
+                <span class="vtime">2m</span>
+                <span class="clip-copy-cue">Copy</span>
+              </span>
             </div>
             <div class="vrow clip">
               <span class="vdot" style="background:#a78bfa"></span>
@@ -217,6 +221,7 @@ const platforms = [
               <span class="vmono">brew install diegoleteliers10/corvo/corvo</span>
               <span class="vtime">3h</span>
             </div>
+            <span class="clip-feedback">Copied</span>
           </div>
           <div class="card-body">
             <span class="card-icon"><Icon name="clipboard" size={26} /></span>
@@ -225,7 +230,7 @@ const platforms = [
           </div>
         </article>
 
-        <article class="bento-card span-5">
+        <article class="bento-card span-5 demo-tiling" data-reveal data-ambient style="--reveal-delay: 120ms">
           <div class="card-visual tiling" aria-hidden="true">
             <div class="mini-desktop">
               <div class="mini-win focus">
@@ -254,31 +259,41 @@ const platforms = [
           </div>
         </article>
 
-        <article class="bento-card span-7">
+        <article class="bento-card span-7 demo-ports" data-reveal data-ambient style="--reveal-delay: 180ms">
           <div class="card-visual" aria-hidden="true">
-            <div class="vrow port">
-              <span class="vport">:3000</span>
-              <span class="vtitle">node (vite-dev-server)</span>
-              <span class="vpid">PID 48291</span>
-              <span class="vkill">Kill</span>
-            </div>
-            <div class="vrow port">
-              <span class="vport">:8080</span>
-              <span class="vtitle">cargo run (backend-api)</span>
-              <span class="vpid">PID 32904</span>
-              <span class="vkill">Kill</span>
-            </div>
-            <div class="vrow port">
-              <span class="vport">:5432</span>
-              <span class="vtitle">postgres (local db)</span>
-              <span class="vpid">PID 28107</span>
-              <span class="vkill">Kill</span>
-            </div>
-            <div class="vrow port">
-              <span class="vport">:9222</span>
-              <span class="vtitle">chromium (debug)</span>
-              <span class="vpid">PID 51736</span>
-              <span class="vkill">Kill</span>
+            <div class="port-list">
+              <div class="port-slot">
+                <div class="vrow port">
+                  <span class="vport">:3000</span>
+                  <span class="vtitle">node (vite-dev-server)</span>
+                  <span class="vpid">PID 48291</span>
+                  <span class="vkill">Kill</span>
+                </div>
+              </div>
+              <div class="port-slot">
+                <div class="vrow port">
+                  <span class="vport">:8080</span>
+                  <span class="vtitle">cargo run (backend-api)</span>
+                  <span class="vpid">PID 32904</span>
+                  <span class="vkill">Kill</span>
+                </div>
+              </div>
+              <div class="port-slot">
+                <div class="vrow port">
+                  <span class="vport">:5432</span>
+                  <span class="vtitle">postgres (local db)</span>
+                  <span class="vpid">PID 28107</span>
+                  <span class="vkill">Kill</span>
+                </div>
+              </div>
+              <div class="port-slot">
+                <div class="vrow port">
+                  <span class="vport">:9222</span>
+                  <span class="vtitle">chromium (debug)</span>
+                  <span class="vpid">PID 51736</span>
+                  <span class="vkill">Kill</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card-body">
@@ -294,7 +309,7 @@ const platforms = [
   <!-- Platforms and installation -->
   <section class="section" id="platforms">
     <div class="wrap">
-      <div class="section-intro">
+      <div class="section-intro" data-reveal>
         <h2>Install on your system.</h2>
         <p>
           Use your package manager, or download signed release binaries straight from GitHub.
@@ -303,8 +318,8 @@ const platforms = [
       </div>
 
       <div class="platforms-grid">
-        {platforms.map((p) => (
-          <article class="platform-card">
+        {platforms.map((p, i) => (
+          <article class="platform-card" data-reveal style={`--reveal-delay: ${i * 60}ms`}>
             <div class="platform-head">
               <h3>{p.name}</h3>
               <span class="platform-tag">{p.tag}</span>
@@ -330,7 +345,7 @@ const platforms = [
 
   <!-- Closing CTA -->
   <section class="cta-band">
-    <div class="wrap cta-inner">
+    <div class="wrap cta-inner" data-reveal>
       <h2>Open the palette. Keep your hands on the keys.</h2>
       <div class="cta-actions">
         <a class="btn btn-primary btn-lg" href="/download">Download Corvo</a>
@@ -340,6 +355,47 @@ const platforms = [
     </div>
   </section>
 </Base>
+
+<script is:inline>
+  (() => {
+    if (!("IntersectionObserver" in window)) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -48px 0px", threshold: 0.12 });
+
+    document.querySelectorAll("[data-reveal]").forEach((target) => {
+      if (target.getBoundingClientRect().top < window.innerHeight) {
+        target.classList.add("is-visible");
+        return;
+      }
+      target.setAttribute("data-reveal-pending", "");
+      observer.observe(target);
+    });
+
+    const ambientTargets = document.querySelectorAll("[data-ambient]");
+    const visibleAmbient = new Set();
+    const syncAmbient = () => {
+      ambientTargets.forEach((target) => {
+        target.toggleAttribute("data-ambient-active", !document.hidden && visibleAmbient.has(target));
+      });
+    };
+    const ambientObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) visibleAmbient.add(entry.target);
+        else visibleAmbient.delete(entry.target);
+      });
+      syncAmbient();
+    }, { threshold: 0.05 });
+
+    ambientTargets.forEach((target) => ambientObserver.observe(target));
+    document.addEventListener("visibilitychange", syncAmbient);
+  })();
+</script>
 
 <script is:inline>
   (() => {
@@ -389,6 +445,18 @@ const platforms = [
     background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(52, 211, 153, 0.14), transparent 70%);
     filter: blur(60px);
     pointer-events: none;
+    animation: hero-glow-drift 10s var(--ease-in-out) infinite alternate;
+    animation-play-state: paused;
+  }
+
+  .hero[data-ambient-active] .hero-lamp {
+    animation-play-state: running;
+  }
+
+  @keyframes hero-glow-drift {
+    0% { opacity: 0.58; transform: translateX(-53%) translateY(-12px) scale(0.9); }
+    48% { opacity: 1; transform: translateX(-47%) translateY(22px) scale(1.08); }
+    100% { opacity: 0.68; transform: translateX(-52%) translateY(0) scale(0.96); }
   }
 
   .hero-grid {
@@ -402,6 +470,30 @@ const platforms = [
 
   .hero-copy {
     max-width: 560px;
+  }
+
+  .hero-copy > * {
+    animation: hero-rise 620ms var(--ease-out) both;
+  }
+
+  .hero-copy > :nth-child(1) { animation-delay: 70ms; }
+  .hero-copy > :nth-child(2) { animation-delay: 140ms; }
+  .hero-copy > :nth-child(3) { animation-delay: 210ms; }
+  .hero-copy > :nth-child(4) { animation-delay: 280ms; }
+  .hero-copy > :nth-child(5) { animation-delay: 350ms; }
+
+  .hero-shot {
+    animation: hero-shot-in 780ms var(--ease-out) 160ms both;
+  }
+
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes hero-shot-in {
+    from { opacity: 0; transform: translateY(18px) scale(0.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .hero-badge {
@@ -432,7 +524,6 @@ const platforms = [
     height: 7px;
     border-radius: 50%;
     background: var(--corvo-accent);
-    animation: pulse-pip 2.2s infinite;
   }
 
   .badge-sep {
@@ -502,7 +593,12 @@ const platforms = [
 
   .install-pill:hover {
     border-color: rgba(52, 211, 153, 0.4);
-    transform: translateY(-1px);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .install-pill:hover {
+      transform: translateY(-1px);
+    }
   }
 
   .install-pill:active {
@@ -687,13 +783,47 @@ const platforms = [
     transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms var(--ease-out);
   }
 
-  .bento-card:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
-    transform: translateY(-2px);
+  .bento-card::before {
+    content: "";
+    position: absolute;
+    top: -18%;
+    left: -22%;
+    width: 85%;
+    height: 72%;
+    background: radial-gradient(ellipse, var(--demo-glow), transparent 70%);
+    filter: blur(24px);
+    opacity: 0.34;
+    pointer-events: none;
+    animation: bento-light 9s var(--ease-in-out) infinite alternate;
+    animation-play-state: paused;
+  }
+
+  .bento-card[data-ambient-active]::before {
+    animation-play-state: running;
+  }
+
+  .demo-search { --demo-glow: rgba(52, 211, 153, 0.34); }
+  .demo-clipboard { --demo-glow: rgba(167, 139, 250, 0.3); }
+  .demo-tiling { --demo-glow: rgba(96, 165, 250, 0.28); }
+  .demo-ports { --demo-glow: rgba(52, 211, 153, 0.28); }
+
+  @keyframes bento-light {
+    0% { opacity: 0.28; transform: translate3d(-10%, -5%, 0) scale(0.88); }
+    52% { opacity: 0.66; transform: translate3d(28%, 10%, 0) scale(1.1); }
+    100% { opacity: 0.34; transform: translate3d(62%, -3%, 0) scale(0.94); }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .bento-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+      transform: translateY(-2px);
+    }
   }
 
   .card-visual {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 9px;
@@ -751,6 +881,248 @@ const platforms = [
 
   .vrow.sel .vtitle {
     font-weight: 600;
+  }
+
+  @keyframes search-result-arrive {
+    0% { opacity: 0.42; transform: translateY(10px) scale(0.985); }
+    6% { opacity: 1; transform: translateY(-2px) scale(1.006); }
+    9%, 84% { opacity: 1; transform: translateY(0) scale(1); }
+    94% { opacity: 0.42; transform: translateY(-6px) scale(0.99); }
+    100% { opacity: 0.42; transform: translateY(10px) scale(0.985); }
+  }
+
+  @keyframes clipboard-selection {
+    0%, 20%, 82%, 100% {
+      background: rgba(255, 255, 255, 0.025);
+      border-color: rgba(255, 255, 255, 0.055);
+      box-shadow: none;
+    }
+    27%, 72% {
+      background: var(--corvo-selected);
+      border-color: rgba(52, 211, 153, 0.56);
+      box-shadow: inset 3px 0 0 var(--corvo-accent), 0 0 20px rgba(52, 211, 153, 0.1);
+    }
+  }
+
+  @keyframes clipboard-time-hide {
+    0%, 31%, 49%, 100% { opacity: 1; }
+    35%, 45% { opacity: 0; }
+  }
+
+  @keyframes clipboard-copy-cue {
+    0%, 31%, 49%, 100% { opacity: 0; transform: translateY(-40%) scale(0.94); background: rgba(255, 255, 255, 0.08); }
+    35%, 39% { opacity: 1; transform: translateY(-50%) scale(1); background: rgba(255, 255, 255, 0.08); }
+    42% { opacity: 1; transform: translateY(-50%) scale(0.88); background: rgba(52, 211, 153, 0.36); }
+    46% { opacity: 0; transform: translateY(-50%) scale(1); background: rgba(52, 211, 153, 0.36); }
+  }
+
+  @keyframes tile-primary {
+    0% { opacity: 0.5; transform: translate3d(30%, 9%, 0) scale(0.78) rotate(-3deg); }
+    10% { opacity: 1; transform: translate3d(-2%, 0, 0) scale(1.02) rotate(0); }
+    14%, 82% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    94%, 100% { opacity: 0.5; transform: translate3d(30%, 9%, 0) scale(0.78) rotate(-3deg); }
+  }
+
+  @keyframes tile-upper {
+    0% { opacity: 0.35; transform: translate3d(-48%, 48%, 0) scale(0.82) rotate(3deg); }
+    11% { opacity: 1; transform: translate3d(2%, -2%, 0) scale(1.02) rotate(0); }
+    15%, 82% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    94%, 100% { opacity: 0.35; transform: translate3d(-48%, 48%, 0) scale(0.82) rotate(3deg); }
+  }
+
+  @keyframes tile-lower {
+    0% { opacity: 0.35; transform: translate3d(-48%, -48%, 0) scale(0.82) rotate(-3deg); }
+    11% { opacity: 1; transform: translate3d(2%, 2%, 0) scale(1.02) rotate(0); }
+    15%, 82% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    94%, 100% { opacity: 0.35; transform: translate3d(-48%, -48%, 0) scale(0.82) rotate(-3deg); }
+  }
+
+  .search-beam {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    left: 24px;
+    height: 50px;
+    border-left: 2px solid rgba(52, 211, 153, 0.85);
+    border-radius: 12px;
+    background: linear-gradient(90deg, rgba(52, 211, 153, 0.2), transparent 82%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes search-rank {
+    0% { opacity: 0; transform: translateY(177px) scaleX(0.9); }
+    2% { opacity: 0.8; transform: translateY(177px) scaleX(1); }
+    7% { opacity: 0.65; transform: translateY(118px) scaleX(0.98); }
+    12% { opacity: 0.7; transform: translateY(59px) scaleX(1); }
+    17% { opacity: 0.8; transform: translateY(0) scaleX(1); }
+    21%, 100% { opacity: 0; transform: translateY(0) scaleX(1); }
+  }
+
+  .clip-feedback {
+    position: absolute;
+    top: 12px;
+    right: 28px;
+    padding: 5px 10px;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 6px;
+    background: var(--corvo-selected);
+    color: var(--corvo-accent);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .clip-feedback::before {
+    content: "✓";
+    margin-right: 5px;
+    font-weight: 700;
+  }
+
+  .demo-clipboard .card-visual {
+    padding-top: 40px;
+  }
+
+  .clip-meta {
+    position: relative;
+    display: block;
+    flex: none;
+    width: 42px;
+    height: 26px;
+    margin-left: auto;
+  }
+
+  .clip-meta .vtime {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+  }
+
+  .clip-copy-cue {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    padding: 3px 7px;
+    border: 1px solid rgba(52, 211, 153, 0.45);
+    border-radius: 5px;
+    color: var(--corvo-accent);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    line-height: 1;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes clipboard-confirm {
+    0%, 42%, 100% { opacity: 0; transform: translateY(6px) scale(0.96); }
+    47%, 68% { opacity: 1; transform: translateY(0) scale(1); }
+    77% { opacity: 0; transform: translateY(-5px) scale(0.98); }
+  }
+
+  .port-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .port-slot {
+    height: 59px;
+  }
+
+  .port-slot:last-child {
+    height: 50px;
+  }
+
+  .port-slot .vrow {
+    height: 50px;
+  }
+
+  .port-slot:first-child {
+    overflow: hidden;
+  }
+
+  @keyframes port-list-cycle {
+    0%, 82% { opacity: 1; }
+    90%, 94% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes port-kill-press {
+    0%, 22%, 32%, 100% { transform: scale(1); background: rgba(239, 68, 68, 0.15); color: #ef4444; box-shadow: none; }
+    27% { transform: scale(0.88); background: #ef4444; color: #fff; box-shadow: 0 0 0 7px rgba(239, 68, 68, 0.18); }
+  }
+
+  @keyframes port-row-exit {
+    0%, 24% { opacity: 1; transform: translateX(0) scale(1); background: rgba(255, 255, 255, 0.025); border-color: rgba(255, 255, 255, 0.055); }
+    27%, 30% { opacity: 1; transform: translateX(0) scale(1); background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.38); }
+    38%, 89% { opacity: 0; transform: translateX(-24px) scale(0.96); background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.38); }
+    90%, 100% { opacity: 1; transform: translateX(0) scale(1); }
+  }
+
+  @keyframes port-slot-collapse {
+    0%, 38% { height: 59px; }
+    46%, 89% { height: 0; }
+    90%, 100% { height: 59px; }
+  }
+
+  .demo-search.is-visible .vrow {
+    animation: search-result-arrive 6400ms var(--ease-out) infinite both;
+  }
+
+  .demo-search.is-visible .vrow:nth-child(2) { animation-delay: 45ms; }
+  .demo-search.is-visible .vrow:nth-child(3) { animation-delay: 90ms; }
+  .demo-search.is-visible .vrow:nth-child(4) { animation-delay: 135ms; }
+  .demo-search.is-visible .vrow:nth-child(5) { animation-delay: 180ms; }
+
+  .demo-clipboard.is-visible .vrow:first-child {
+    animation: clipboard-selection 7200ms var(--ease-in-out) infinite both;
+  }
+  .demo-clipboard.is-visible .clip-meta .vtime {
+    animation: clipboard-time-hide 7200ms var(--ease-in-out) infinite both;
+  }
+  .demo-clipboard.is-visible .clip-copy-cue {
+    animation: clipboard-copy-cue 7200ms var(--ease-in-out) infinite both;
+  }
+
+  .demo-search.is-visible .search-beam {
+    animation: search-rank 6400ms var(--ease-in-out) 580ms infinite both;
+  }
+
+  .demo-clipboard.is-visible .clip-feedback {
+    animation: clipboard-confirm 7200ms var(--ease-out) 520ms infinite both;
+  }
+
+  .demo-tiling.is-visible .mini-win:first-child {
+    animation: tile-primary 7800ms var(--ease-out) infinite both;
+  }
+  .demo-tiling.is-visible .mini-win:nth-child(2) {
+    animation: tile-upper 7800ms var(--ease-out) 110ms infinite both;
+  }
+  .demo-tiling.is-visible .mini-win:nth-child(3) {
+    animation: tile-lower 7800ms var(--ease-out) 210ms infinite both;
+  }
+
+  .demo-ports.is-visible .port-list {
+    animation: port-list-cycle 8000ms var(--ease-in-out) infinite both;
+  }
+  .demo-ports.is-visible .port-slot:first-child {
+    animation: port-slot-collapse 8000ms var(--ease-in-out) infinite both;
+  }
+  .demo-ports.is-visible .port-slot:first-child .vrow {
+    animation: port-row-exit 8000ms var(--ease-in-out) infinite both;
+  }
+  .demo-ports.is-visible .port-slot:first-child .vkill {
+    animation: port-kill-press 8000ms var(--ease-in-out) infinite both;
+  }
+
+  .bento-card.is-visible .card-visual * {
+    animation-play-state: paused;
+  }
+
+  .bento-card.is-visible[data-ambient-active] .card-visual * {
+    animation-play-state: running;
   }
 
   .vtitle.mono,
@@ -882,6 +1254,7 @@ const platforms = [
 
   .card-body {
     position: relative;
+    z-index: 1;
     display: grid;
     justify-items: start;
     gap: 8px;
@@ -930,9 +1303,11 @@ const platforms = [
     transition: border-color 140ms ease, transform 140ms var(--ease-spring);
   }
 
-  .platform-card:hover {
-    border-color: rgba(255, 255, 255, 0.18);
-    transform: translateY(-2px);
+  @media (hover: hover) and (pointer: fine) {
+    .platform-card:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-2px);
+    }
   }
 
   .platform-head {
