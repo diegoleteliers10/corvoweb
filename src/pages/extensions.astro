@@ -14,21 +14,21 @@ const shipped = [
   { name: "web-search-fallback", desc: "Escape hatch to the web" },
 ];
 
-const planned = [
+const batch = [
   { name: "kill-process", desc: "List processes by CPU or memory and kill them", note: "All platforms" },
   { name: "brew", desc: "Outdated formulae, upgrades, installed packages", note: "macOS" },
   { name: "text-utilities", desc: "Case conversion, Base64, JSON, UUIDs, hashes", note: "All platforms" },
   { name: "pomodoro", desc: "Work and break timers with notifications", note: "All platforms" },
   { name: "weather", desc: "Conditions and forecast via wttr.in", note: "All platforms" },
-  { name: "notes", desc: "Markdown scratchpad with search", note: "All platforms" },
-  { name: "media-control", desc: "MPRIS, SMTC, and AppleScript playback control", note: "All platforms" },
-  { name: "browser-tabs", desc: "Search and focus tabs, bookmarks, and history", note: "macOS first" },
+  { name: "notes", desc: "Native Markdown editor with autosave, tables, and code colors", note: "All platforms" },
+  { name: "media-control", desc: "Spotify and Music playback through AppleScript", note: "macOS" },
+  { name: "browser-tabs", desc: "Focus Chrome, Brave, and Edge tabs. Search bookmarks", note: "macOS" },
 ];
 ---
 
 <Base
   title="Extensions — Corvo"
-  description="Corvo extends through native Rust crates compiled into the binary. See what ships today and what is on the roadmap."
+  description="Corvo extends through native Rust crates compiled into the binary. See the commands and platform support in Corvo 0.4.0."
 >
   <section class="head">
     <div class="wrap">
@@ -63,11 +63,11 @@ const planned = [
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <h2>Batch one, in development</h2>
+        <h2>New in 0.4.0</h2>
       </div>
       <ul class="list">
         {
-          planned.map((e) => (
+          batch.map((e) => (
             <li>
               <code>{e.name}</code>
               <span>{e.desc}</span>
@@ -76,12 +76,17 @@ const planned = [
           ))
         }
       </ul>
+      <p class="platform-limit">
+        Media Control and Browser Tabs require macOS. Linux and Windows support
+        for these two commands is planned. Browser history is also planned.
+        Weather uses wttr.in and requires network access.
+      </p>
       <p style="margin-top: var(--s5);">
         Follow the plan in
         <a
-          href="https://github.com/diegoleteliers10/corvo"
+          href="https://github.com/diegoleteliers10/corvo/blob/main/EXTENSIONS_PLAN.md"
           rel="noopener"
-          target="_blank">the repository</a
+          target="_blank">the extensions plan</a
         >, or propose a command in a discussion.
       </p>
     </div>
@@ -126,8 +131,13 @@ const planned = [
     white-space: nowrap;
   }
   @media (max-width: 640px) {
+    li {
+      flex-wrap: wrap;
+      gap: var(--s2);
+    }
     .note {
-      display: none;
+      margin-left: 0;
+      width: 100%;
     }
   }
 </style>

@@ -15,6 +15,17 @@ const core = [
   { icon: "refresh", title: "Auto-Updater", body: "Update checks with cryptographic signature verification. You stay in control of when." },
 ];
 
+const extensions = [
+  { icon: "snippet", title: "Notes", body: "Edit Markdown in a native window with autosave, tables, code colors, text selection, and a scrollbar." },
+  { icon: "refresh", title: "Pomodoro", body: "Start focus and break intervals, pause or skip a timer, and receive a desktop notification." },
+  { icon: "search", title: "Weather", body: "View current conditions and a three-day forecast. Search a city through wttr.in." },
+  { icon: "calc", title: "Text Utilities", body: "Convert case, encode text, format JSON, generate UUIDs, and calculate hashes." },
+  { icon: "sliders", title: "Process Control", body: "Find processes by CPU or memory use. Terminate a process or confirm force termination." },
+  { icon: "app", title: "Homebrew · macOS", body: "Search packages, install or upgrade them, and manage services." },
+  { icon: "refresh", title: "Media Control · macOS", body: "Toggle playback and change tracks in Spotify and Music." },
+  { icon: "link", title: "Browser Tabs · macOS", body: "Search and focus Chrome, Brave, and Edge tabs. Open saved bookmarks." },
+];
+
 const architecture = [
   {
     title: "One Command trait",
@@ -33,7 +44,7 @@ const architecture = [
 
 <Base
   title="Features — Corvo"
-  description="Ten built-in commands: app launcher, clipboard history, window management, snippets, and more. All native, all local."
+  description="Native launcher commands, Markdown notes, timers, text tools, and platform-specific browser and media controls."
 >
   <section class="head">
     <div class="wrap">
@@ -48,6 +59,15 @@ const architecture = [
   <section class="section">
     <div class="wrap">
       <FeatureList features={core} columns={1} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>New in 0.4.0</h2>
+      </div>
+      <FeatureList features={extensions} columns={1} />
     </div>
   </section>
 
