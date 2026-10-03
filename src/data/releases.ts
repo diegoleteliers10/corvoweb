@@ -103,7 +103,7 @@ const bulletsOf = (body: string | null): string[] => {
 
 // Shown only when the GitHub API is unreachable at build time.
 // Kept current by .github/workflows/refresh.yml — do not bump by hand.
-const FALLBACK_TAG = "v0.3.6";
+const FALLBACK_TAG = "v0.4.0";
 
 const fallbackItem = (): ReleaseItem => {
   const version = FALLBACK_TAG.replace(/^v/, "");
