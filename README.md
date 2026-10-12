@@ -22,20 +22,23 @@ src/
 ├── components/
 │   ├── Header.astro        # nav sticky con blur
 │   ├── Footer.astro
-│   ├── Hero                # en pages/index.astro
 │   ├── PaletteMockup.astro # réplica CSS del launcher (usa la paleta real)
-│   ├── DemoTabs.astro      # demo interactiva por tabs (radios, sin JS)
+│   ├── WorkflowShowcase.astro # demos por tabs con capturas reales
+│   ├── AppFrame.astro      # marco de app que envuelve las capturas
 │   ├── FeatureList.astro   # lista tipográfica de features (sin cards)
 │   ├── Icon.astro          # set de iconos SVG propios, stroke 1.5
 │   ├── DownloadButtons.astro
 │   └── KeyCap.astro        # teclas tipo ⌥ Space
 ├── pages/
-│   ├── index.astro         # hero + features + perf + roadmap + CTA
+│   ├── index.astro         # hero + bento de features + descargas + CTA
 │   ├── features.astro      # grid de comandos + arquitectura
 │   ├── extensions.astro    # shipped + roadmap batch 1
 │   ├── download.astro      # brew, dmg, AppImage, deb, msi, source
+│   ├── releases.astro      # historial de releases
 │   ├── blog/               # índice + posts (.md con layout en frontmatter)
 │   └── 404.astro
+├── data/
+│   └── releases.ts         # releases desde la API de GitHub, con fallback offline
 └── styles/global.css       # tokens de diseño (paleta de corvo-ui)
 ```
 
@@ -52,6 +55,15 @@ Los tokens de `global.css` salen de `crates/corvo-ui/src/lib.rs` en corvo:
 | `--corvo-text-dim` | `#8E8E93` | `COLOR_TEXT_DIM` |
 
 Si cambia la paleta del launcher, actualizar ambos lados.
+
+## Releases
+
+`src/data/releases.ts` pide las releases a la API de GitHub en build time y
+cae a `FALLBACK_TAG` si no hay red. Al publicar un tag nuevo basta con subir
+esa etiqueta con sus notas: la home, el botón de descarga y `/releases` toman
+la versión, la fecha y los enlaces del propio release. `FALLBACK_TAG` se
+actualiza a mano en cada release para que la vista offline no quede en una
+versión vieja.
 
 ## Brand
 

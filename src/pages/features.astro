@@ -5,14 +5,21 @@ import FeatureList from "../components/FeatureList.astro";
 const core = [
   { icon: "app", title: "App Launcher", body: "Fuzzy search across installed apps with frecency ranking powered by LMDB. The more you use Corvo, the better it ranks." },
   { icon: "search", title: "File Search", body: "Search your filesystem with configurable scopes and ignore rules, backed by the same SIMD matcher." },
-  { icon: "clipboard", title: "Clipboard History", body: "Text, code, colors, and images. Dedup, retention windows, and respect for password-manager concealment flags." },
+  { icon: "clipboard", title: "Clipboard History", body: "Text, code, colors, and images. Dedup, retention windows, and respect for password-manager concealment flags. Paste the first nine entries directly with Cmd+1 through Cmd+9." },
   { icon: "grid", title: "Window Management", body: "Tile windows into halves, thirds, and quarters. Configure gaps and save layout templates." },
   { icon: "sliders", title: "System Actions", body: "Toggle dark mode, control audio and displays, and jump straight to settings panels." },
-  { icon: "calc", title: "Calculator", body: "Evaluate math expressions inline, with calculation history one keystroke away." },
-  { icon: "snippet", title: "Snippets", body: "Store text templates with custom keywords in a human-editable TOML file." },
+  { icon: "calc", title: "Calculator", body: "Evaluate math expressions inline, with calculation history one keystroke away. Convert currency with expressions like 10 usd to eur, using cached exchange rates." },
+  { icon: "snippet", title: "Snippets", body: "Reusable text templates with optional keywords. Create and edit them from the palette with Cmd+E on the selected snippet, and expand {clipboard}, {date}, {time}, and {datetime} when they paste." },
   { icon: "emoji", title: "Emoji Picker", body: "Search emojis by name or keyword and copy them with your preferred skin tone." },
-  { icon: "link", title: "Quicklinks", body: "Open custom URLs and parametric web searches from the same palette." },
+  { icon: "link", title: "Quicklinks", body: "Open custom URLs and parametric web searches from the same palette. Create and edit a quicklink from the palette with Cmd+E." },
   { icon: "refresh", title: "Auto-Updater", body: "Update checks with cryptographic signature verification. You stay in control of when." },
+];
+
+const reach = [
+  { icon: "snippet", title: "Aliases on every row", body: "Give an app, a command, a snippet, a quicklink, or a window action a short name of your own. Typing it brings the row up, and the first letters of an alias match too. Scattered letters never match, so a short alias stays worth setting." },
+  { icon: "grid", title: "Shortcuts that take effect now", body: "Record a shortcut on any settings row and it binds immediately. Turning a section off hides its rows from search but keeps its shortcuts. An app shortcut toggles: it focuses the app when another is in front and hides it when it is already focused." },
+  { icon: "search", title: "Scoped search", body: "Type snippet: or quicklink: to search only snippets or only quicklinks." },
+  { icon: "link", title: "Create from the palette", body: "Create Snippet and Create Quicklink open a form over the launcher instead of opening Settings. Tab moves between fields, Enter saves, and Escape cancels." },
 ];
 
 const extensions = [
@@ -22,8 +29,8 @@ const extensions = [
   { icon: "calc", title: "Text Utilities", body: "Convert case, encode text, format JSON, generate UUIDs, and calculate hashes." },
   { icon: "sliders", title: "Process Control", body: "Find processes by CPU or memory use. Terminate a process or confirm force termination." },
   { icon: "app", title: "Homebrew · macOS", body: "Search packages, install or upgrade them, and manage services." },
-  { icon: "refresh", title: "Media Control · macOS", body: "Toggle playback and change tracks in Spotify and Music." },
-  { icon: "link", title: "Browser Tabs · macOS", body: "Search and focus Chrome, Brave, and Edge tabs. Open saved bookmarks." },
+  { icon: "refresh", title: "Media Control", body: "Toggle playback and change tracks for the active player. AppleScript on macOS, SMTC on Windows, MPRIS on Linux." },
+  { icon: "link", title: "Browser Tabs", body: "Search and focus Chrome, Brave, Edge, Firefox, Arc, Dia, Safari, and Aside tabs, and open saved bookmarks. Each browser appears only while it is installed." },
 ];
 
 const architecture = [
@@ -44,7 +51,7 @@ const architecture = [
 
 <Base
   title="Features — Corvo"
-  description="Native launcher commands, Markdown notes, timers, text tools, and platform-specific browser and media controls."
+  description="Aliases and shortcuts on every row, snippet and quicklink editors in the palette, Markdown notes, timers, text tools, browser tabs, and media controls."
 >
   <section class="head">
     <div class="wrap">
@@ -65,7 +72,16 @@ const architecture = [
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <h2>New in 0.4.0</h2>
+        <h2>New in 0.6.0</h2>
+      </div>
+      <FeatureList features={reach} columns={1} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Also included</h2>
       </div>
       <FeatureList features={extensions} columns={1} />
     </div>

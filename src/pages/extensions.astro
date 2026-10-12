@@ -2,33 +2,36 @@
 import Base from "../layouts/Base.astro";
 
 const shipped = [
-  { name: "app-launcher", desc: "Fuzzy app search with frecency ranking" },
-  { name: "file-search", desc: "Filesystem search with scopes and ignore rules" },
-  { name: "clipboard-manager", desc: "Text, code, color, and image history" },
-  { name: "calculator", desc: "Inline math with history" },
-  { name: "snippets", desc: "Keyword text templates in TOML" },
-  { name: "window-management", desc: "Tiling, gaps, and layout templates" },
-  { name: "emoji-picker", desc: "Emoji search with skin tones" },
-  { name: "quicklinks", desc: "Custom URLs and web searches" },
-  { name: "system-actions", desc: "Dark mode, audio, displays, settings" },
-  { name: "web-search-fallback", desc: "Escape hatch to the web" },
-];
-
-const batch = [
+  { name: "app-launcher", desc: "Fuzzy app search with frecency ranking", note: "All platforms" },
+  { name: "file-search", desc: "Filesystem search with scopes and ignore rules", note: "All platforms" },
+  { name: "clipboard-manager", desc: "Text, code, color, and image history", note: "All platforms" },
+  { name: "calculator", desc: "Inline math with history and cached currency rates", note: "All platforms" },
+  { name: "snippets", desc: "Text templates with keywords and {clipboard} or {date} placeholders", note: "All platforms" },
+  { name: "window-management", desc: "Tiling, gaps, and layout templates", note: "All platforms" },
+  { name: "emoji-picker", desc: "Emoji search with skin tones", note: "All platforms" },
+  { name: "quicklinks", desc: "Custom URLs and web searches with placeholders", note: "All platforms" },
+  { name: "system-actions", desc: "Dark mode, audio, displays, settings", note: "All platforms" },
   { name: "kill-process", desc: "List processes by CPU or memory and kill them", note: "All platforms" },
-  { name: "brew", desc: "Outdated formulae, upgrades, installed packages", note: "macOS" },
   { name: "text-utilities", desc: "Case conversion, Base64, JSON, UUIDs, hashes", note: "All platforms" },
   { name: "pomodoro", desc: "Work and break timers with notifications", note: "All platforms" },
   { name: "weather", desc: "Conditions and forecast via wttr.in", note: "All platforms" },
   { name: "notes", desc: "Native Markdown editor with autosave, tables, and code colors", note: "All platforms" },
-  { name: "media-control", desc: "Spotify and Music playback through AppleScript", note: "macOS" },
-  { name: "browser-tabs", desc: "Focus Chrome, Brave, and Edge tabs. Search bookmarks", note: "macOS" },
+  { name: "countdown", desc: "Live countdown timers from a typed date", note: "All platforms" },
+  { name: "builtin-commands", desc: "About, backups, camera, Define Word, and the rest of the built-in commands", note: "All platforms" },
+  { name: "media-control", desc: "Playback and track control for the active player", note: "All platforms" },
+  { name: "browser-tabs", desc: "Focus Chrome, Brave, Edge, Firefox, Arc, Dia, Safari, and Aside tabs. Search bookmarks", note: "All platforms" },
+  { name: "brew", desc: "Outdated formulae, upgrades, installed packages", note: "macOS" },
+];
+
+const navigation = [
+  { name: "Switch Windows", desc: "Cycle through open windows" },
+  { name: "Search Menu Bar Items", desc: "Find and open menu bar items", note: "macOS" },
 ];
 ---
 
 <Base
   title="Extensions — Corvo"
-  description="Corvo extends through native Rust crates compiled into the binary. See the commands and platform support in Corvo 0.4.0."
+  description="Corvo extends through native Rust crates compiled into the binary. See every command and its platform support in Corvo 0.6.0."
 >
   <section class="head">
     <div class="wrap">
@@ -53,6 +56,7 @@ const batch = [
             <li>
               <code>{e.name}</code>
               <span>{e.desc}</span>
+              <span class="note">{e.note}</span>
             </li>
           ))
         }
@@ -63,23 +67,25 @@ const batch = [
   <section class="section">
     <div class="wrap">
       <div class="section-head">
-        <h2>New in 0.4.0</h2>
+        <h2>Window and menu navigation</h2>
       </div>
       <ul class="list">
         {
-          batch.map((e) => (
+          navigation.map((e) => (
             <li>
               <code>{e.name}</code>
               <span>{e.desc}</span>
-              <span class="note">{e.note}</span>
+              {e.note && <span class="note">{e.note}</span>}
             </li>
           ))
         }
       </ul>
       <p class="platform-limit">
-        Media Control and Browser Tabs require macOS. Linux and Windows support
-        for these two commands is planned. Browser history is also planned.
-        Weather uses wttr.in and requires network access.
+        Homebrew is macOS only. Menu bar search is macOS only, matching the
+        Settings section that shows it. Weather uses wttr.in and requires
+        network access. Browser tabs list a browser's live tabs only while it
+        is installed, and read them over its remote debugging port on Windows
+        and Linux.
       </p>
       <p style="margin-top: var(--s5);">
         Follow the plan in
